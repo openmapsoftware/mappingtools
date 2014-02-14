@@ -1,6 +1,7 @@
 package com.openMap1.mapper.userConverters;
 
 import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 /**
  * class of FHIR property conversion methods for the Silverlink database
@@ -20,7 +21,7 @@ public class SilverFHIRConverters extends FHIRConverters{
 	 */
 	static public String makeAppointmentStart(Hashtable<?,?> lookup, String startDate, String startTime)
 	{
-		return (startDate + "T" + startTime + "Z");
+		return (startDate + "T" + addZeroSeconds(startTime) + "Z");
 	}
 	
 	
@@ -35,7 +36,21 @@ public class SilverFHIRConverters extends FHIRConverters{
 	 */
 	static public String makeAppointmentEnd(Hashtable<?,?> lookup, String startDate, String startTime, String duration)
 	{
-		return (startDate + "T" + addMinutes(startTime,duration)  + "Z");
+		return (startDate + "T" + addZeroSeconds(addMinutes(startTime,duration))  + "Z");
+	}
+	
+	/**
+	 * if only minutes are specified, add zero seconds on the end
+	 * @param minutes
+	 * @return
+	 */
+	static String addZeroSeconds(String minutes)
+	{
+		String roughStartTime = minutes;
+		StringTokenizer st = new StringTokenizer(roughStartTime,":");
+		if (st.countTokens() == 2) roughStartTime = roughStartTime + ":00";
+		
+		return roughStartTime;
 	}
 
 

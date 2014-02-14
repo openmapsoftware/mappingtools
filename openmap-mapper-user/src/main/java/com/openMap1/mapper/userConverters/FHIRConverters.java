@@ -27,6 +27,7 @@ public class FHIRConverters {
 		int duration = 0;
 		String hourString = "00";
 		String minString = "00";
+		String secString = "00";
 		try
 		{
 			StringTokenizer st = new StringTokenizer(startTime,":");
@@ -45,10 +46,12 @@ public class FHIRConverters {
 			if (hours < 10) hourString = "0" + hourString;
 			minString = new Integer(mins).toString();
 			if (mins < 10) minString = "0" + minString;
+			secString = new Integer(secs).toString();
+			if (secs < 10) secString = "0" + secString;
 		}
 		catch (Exception ex) {message("Time error: " + ex.getMessage() + " when adding " + minutes + " to " + startTime);}
 		
-		return (hourString + ":" + minString + ":" + secs);
+		return (hourString + ":" + minString + ":" + secString);
 	}
 	
 	static void message(String s) {System.out.println(s);}

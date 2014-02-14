@@ -66,7 +66,7 @@ public class FHIRMapper  extends AbstractReaderWriter implements XOReader, objec
 	
 	private boolean doCheck = true;
 	
-	private boolean tracing = false;
+	private boolean tracing = true;
 
 	private static String TEMPORARY_READ_FILE = "/eclipseTempReadFile.xml";
 	private static String TEMPORARY_WRITE_FILE = "/eclipseTempWriteFile.xml";
@@ -113,10 +113,9 @@ public class FHIRMapper  extends AbstractReaderWriter implements XOReader, objec
     		
     		// parse the input to get an AtomFeed object of the reference implementation
     		trace("Parsing input stream");
-    		// code for a previous version of the reference implementation
-    		// AtomParser parser = new AtomParser();
-    		// AtomFeed feed = parser.parse(fileStream);
     		XmlParser parser = new XmlParser();
+    		// allow unknown new tag names; but does not work for contained resources (new parser instance)
+    		parser.setAllowUnknownContent(true);
     		AtomFeed feed = parser.parseGeneral(fileStream).getFeed();
     		
     		// delete the temporary file

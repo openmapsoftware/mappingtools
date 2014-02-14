@@ -35,6 +35,7 @@ import com.openMap1.mapper.reader.MDLXOReader;
 import com.openMap1.mapper.structures.DBStructure;
 import com.openMap1.mapper.userConverters.DBConnect;
 import com.openMap1.mapper.util.FileUtil;
+import com.openMap1.mapper.util.GenUtil;
 import com.openMap1.mapper.util.XMLUtil;
 
 public class FHIRServlet  extends HttpServlet {
@@ -45,9 +46,13 @@ public class FHIRServlet  extends HttpServlet {
 	public HttpSession session() {return session;}
 	private HttpSession session;
 	
-	// name of the server in the current requestcheckResourceName
+	// name of the server in the current request checkResourceName
 	public String serverName() {return serverName;}
 	private String serverName;
+	
+	// name of the server in the current request checkResourceName
+	public String serverType() {return serverType;}
+	private String serverType;
 	
 	// name of the resource in the current request
 	public String resourceName() {return resourceName;}
@@ -90,6 +95,10 @@ public class FHIRServlet  extends HttpServlet {
 	 */
 	public String[] searchColHeaders() {return searchColHeaders;}
 	private String[] searchColHeaders;
+	
+	// types of FHIR server
+	public static String RDBMS = "RDBMS";
+	public static String XML = "XML";
     
     //---------------------------------------------------------------------------------------
 	//                       Mechanics of the connection: receiving GETs
@@ -131,7 +140,6 @@ public class FHIRServlet  extends HttpServlet {
 				processSearch(servers, params,response);
 			}
 			
-			message("sent FHIR response");
 
 		}
 		catch (Exception ex) {ex.printStackTrace();makeError(response, ex.getMessage());}
@@ -144,9 +152,8 @@ public class FHIRServlet  extends HttpServlet {
 	 */
 	private String[] parseURI(String uri) throws MapperException
 	{
-		message("parsing URI '" + uri + "'");
 		StringTokenizer st = new StringTokenizer(uri,"/");
-		// first step (Tomcat folder name) is not checked now
+		// first step (Tomcat folder name) is not checked now, as it may vary
 		st.nextToken();
 		String step2 = st.nextToken();
 		if (!(step2.equals("farm"))) throw new MapperException("Step 2 of URI '" + uri + "' should be 'farm'");
@@ -174,13 +181,19 @@ public class FHIRServlet  extends HttpServlet {
 		{
 			serverName = serverTokens.nextToken();
 			servers[index] = serverName;
-			checkServerName(serverName);
-			getDBStructure(serverName);
-			message("Made connection to database for server '" + serverName + "'");
+			serverType = getServerParameter(serverName,"type");
+			if (serverType.equals(RDBMS))
+			{
+				getDBStructure(serverName);
+			}
+			else if (serverType.equals(XML))
+			{
+				getDocumentRoot(serverName);
+			}
 			
 			checkResourceName(serverName,resourceName);
 			getMappedStructure(serverName, resourceName);
-			message("Found mappings for resource '" + resourceName + "'");
+			// message("Found mappings for resource '" + resourceName + "'");
 			index++;
 		}
 		if ((servers.length > 1) && (isSimpleRead)) 
@@ -198,10 +211,9 @@ public class FHIRServlet  extends HttpServlet {
 	 */
 	private void processSimpleRead(HttpServletResponse response) throws Exception
 	{
-		FHIRSearchManager manager = new FHIRSearchManager(this);
+		FHIRSearchManager manager = new FHIRSearchManager(this,serverName,serverType);
 		EObject resource = manager.getResource(resourceName, simpleReadId);
-		sendResource(resource,response,manager,simpleReadId);
-		
+		sendResource(resource,response,manager,simpleReadId);		
 	}
 	
 	/**
@@ -212,7 +224,7 @@ public class FHIRServlet  extends HttpServlet {
 	private void processConformanceOperation (HttpServletResponse response) throws Exception
 	{
 		resourceName= "Conformance";
-		FHIRSearchManager manager = new FHIRSearchManager(this);
+		FHIRSearchManager manager = new FHIRSearchManager(this,serverName,serverType);
 		EObject resource = manager.getConformance(serverName);
 		sendResource(resource,response,manager,"no id");
 	}
@@ -254,36 +266,149 @@ public class FHIRServlet  extends HttpServlet {
 		{
 			// convert a FHIR search into an object query 
 			serverName = servers[s];
+			serverType = getServerParameter(serverName, "type");
 			allServerNames = allServerNames + serverName + " ";
-			Vector<String[]> searches = getSearches(serverName, resourceName);
-			QueryConverter converter = new QueryConverter(this,params,searches);	
-			String objQuery = converter.queryString();
+
+			QueryConverter converter = new QueryConverter(this,params,serverName, resourceName);
+			Vector<String> objQueries = converter.queryStrings();
+			FHIRSearchManager manager = new FHIRSearchManager(this,serverName,serverType);
+			Hashtable<String,String> ids = new Hashtable<String,String>();
+			EObject result = null;
+			AtomFeed feed = null;
 			
-			// execute the object query and return an EObject (containing all the resulting resources) for the AtomFeed
-			FHIRSearchManager manager = new FHIRSearchManager(this);
-			EObject result = manager.getFHIRSearchResult(objQuery);
-			
-			// convert the result into an instance of the FHIR reference model
-			EPackage classModel = getMappedStructure(serverName, resourceName).getClassModelRoot();
-			EcoreReferenceBridge bridge = new EcoreReferenceBridge(classModel);
-			AtomFeed feed = bridge.getReferenceModelFeed(result);
-			feed.setTitle(serverName);
-			
-			// set the narratives of all the resources in the feed
-			for (Iterator<AtomEntry<?>> it = feed.getEntryList().iterator();it.hasNext();)
+			// non-chained queries
+			if (objQueries.size() == 1)
 			{
-				AtomEntry<?> entry = it.next();
-				Resource resource = entry.getResource();
-				Narrative narrative  = manager.getNarrative(entry.getId());
-				if (narrative != null) resource.setText(narrative);
+				// execute the object query and build a list of FHIR ids 
+				manager.buildFHIRIds(resourceName, objQueries.get(0), null, ids);
+				
+				// return an EObject (containing all the resulting resources) for the AtomFeed
+				result = manager.getResourceBundle(resourceName, ids);
+				feed = makeFeedWithNarratives(result, manager);
 			}
+			
+			// chained queries on one or more referenced resources
+			else if (objQueries.size() > 1)
+			{
+				Vector<Hashtable<String,String>> allRefIds = new Vector<Hashtable<String,String>>();
+				Vector<AtomFeed> allFeeds = new Vector<AtomFeed>();
+
+				// collect FHIR ids from chained queries on referenced resources
+				for (int chain = 0; chain < objQueries.size() - 1; chain++)
+				{
+					String chainedQuery = objQueries.get(chain);
+					
+					// find all ids of the referenced resource
+					String refResourceName = getSearchedResource(chainedQuery);
+					Hashtable<String,String> refIds = new Hashtable<String,String>();
+					manager.buildFHIRIds(refResourceName, chainedQuery, null, refIds);
+					allRefIds.add(refIds);
+					message("Referenced ids for resource " + refResourceName + ": " + refIds.size());
+					
+					// make a bundle containing the referenced resources
+					EObject refResult = manager.getResourceBundle(refResourceName, refIds);
+					AtomFeed refFeed = makeFeedWithNarratives(refResult, manager);
+					allFeeds.add(refFeed);
+				}
+				
+				/* for every combination of ids of referenced resources, build up the list of ids of the queried resource (set union) */
+				Vector<String[]> idProduct = cartesianProduct(allRefIds);
+				String objQuery = objQueries.get(objQueries.size() - 1); // main object query, on the queried resource
+				for (int i = 0; i < idProduct.size();i++)
+				{
+					String[] idArray = idProduct.get(i);
+					// run the query with one combination of referenced resource ids, to collect more ids of the queried resource
+					manager.buildFHIRIds(resourceName, objQuery, idArray, ids);
+					message ("Read " + i + " of resource " + resourceName + " by query " + objQuery + " gets to " + ids.size());
+				}
+								
+				// make an EObject (containing all the resulting queried resources) for the AtomFeed
+				result = manager.getResourceBundle(resourceName, ids);
+				AtomFeed queriedResourceFeed = makeFeedWithNarratives(result, manager);
+				
+				// merge the feed containing the queried resources (first) with the feeds containing the referenced resources  
+				allFeeds.insertElementAt(queriedResourceFeed, 0);
+				feed = mergeFeeds(allFeeds);
+			} 
+						
+			// collect feeds from different servers in a Vector to be merged
 			feeds.add(feed);
 		}
 		
-		// send the response
+		// merge feeds from all servers and send the response
 		AtomFeed merged = mergeFeeds(feeds);
 		merged.setTitle("Search " + resourceName + " in " + allServerNames);
 		sendAtomFeedResponse(response,merged);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param allIds a Vector of Hashtables whose keys are fhir ids
+	 * @return a cartesian product Vector of String arrays
+	 * Each string array holds fhir ids, and every combination is covered
+	 */
+	private Vector<String[]> cartesianProduct(Vector<Hashtable<String,String>> allIds)
+	{
+		Vector<String[]> product = new Vector<String[]>();
+		Hashtable<String,String> firstIds = allIds.get(0);
+		allIds.remove(0);
+
+		if (allIds.size() == 0)
+		{
+			for (Enumeration<String> en = firstIds.keys();en.hasMoreElements();)
+			{
+				String[] keys = new String[1];
+				keys[0] = en.nextElement();
+				product.add(keys);
+			}
+		}
+
+		else if (allIds.size() > 0)
+		{
+			Vector<String[]> smaller = cartesianProduct(allIds);
+			for (Enumeration<String> en = firstIds.keys();en.hasMoreElements();)
+			{
+				String key = en.nextElement();
+				for (int s = 0; s < smaller.size(); s++)
+				{
+					String[] prev = smaller.get(s);
+					String[] now = new String[prev.length + 1];
+					now[0] = key;
+					for (int p = 0; p < prev.length; p++) now[p+1] = prev[p];
+					product.add(now);
+				}
+			}
+		}
+		
+		return product;
+	}
+	
+	/**
+	 * 
+	 * @param result
+	 * @param manager
+	 * @return
+	 * @throws MapperException
+	 */
+	private AtomFeed makeFeedWithNarratives(EObject result, FHIRSearchManager manager) throws MapperException
+	{
+		// convert the result into an instance of the FHIR reference model
+		EPackage classModel = getMappedStructure(serverName, resourceName).getClassModelRoot();
+		EcoreReferenceBridge bridge = new EcoreReferenceBridge(classModel);
+		AtomFeed feed = bridge.getReferenceModelFeed(result);
+		feed.setTitle(serverName);
+
+		// set the narratives of all the resources in the feed
+		for (Iterator<AtomEntry<?>> it = feed.getEntryList().iterator();it.hasNext();)
+		{
+			AtomEntry<?> entry = it.next();
+			Resource resource = entry.getResource();
+			Narrative narrative  = manager.getNarrative(entry.getId());
+			if (narrative != null) resource.setText(narrative);
+		}
+		return feed;
 	}
 	
 	/**
@@ -298,17 +423,23 @@ public class FHIRServlet  extends HttpServlet {
 		catch (Exception ey) {message("Exception handling exception: " + ey.getMessage());}
 	}
 	
-	
 	/**
-	 * 
-	 * @param serverName
-	 * @throws MapperException
+	 * extract the resource name from an object query
+	 * @param query
+	 * @return
 	 */
-	private void checkServerName(String serverName) throws MapperException
+	private String getSearchedResource(String query)
 	{
-		String[] details = getServerDetails(serverName);
-		if (details == null) throw new MapperException("Server '" + serverName + "' does not exist");
+		// the resource in mentioned in the second word of the query
+		StringTokenizer st = new StringTokenizer(query," ");
+		st.nextToken(); // 'select'
+		String resPart = st.nextToken(); // this is <Resource>.fhir_id
+		
+		StringTokenizer su = new StringTokenizer(resPart,".");
+		return su.nextToken();
 	}
+	
+	
 	
 	/**
 	 * 
@@ -342,9 +473,25 @@ public class FHIRServlet  extends HttpServlet {
 	}
 	
 	// ----------------------------------------------------------------------------------------------------
-	//             session-cached access to csv rows defining servers, resources, and searches
+	//             session-cached access to csv rows defining servers
 	// ----------------------------------------------------------------------------------------------------
 	
+	
+	/**
+	 * 
+	 * @param serverName
+	 * @param parameter
+	 * @return
+	 * @throws MapperException
+	 */
+	public String getServerParameter(String serverName, String parameter) throws MapperException
+	{
+		getServerDetails(serverName);
+		if (!GenUtil.inArray(parameter, serverColHeaders)) throw new MapperException("No server parameter " + parameter);
+		int col = 0;
+		for (int c = 0; c < serverColHeaders.length; c++) if (serverColHeaders[c].equals(parameter)) col = c;
+		return getServerDetails(serverName)[col];
+	}
 	/**
 	 * 
 	 * @param serverName
@@ -370,7 +517,7 @@ public class FHIRServlet  extends HttpServlet {
 	{
 		Hashtable<String,String[]> allServers = new Hashtable<String,String[]>();
 		String fileLocation = session.getServletContext().getRealPath("serviceDefs/servers.csv");
-		message("Reading server file at '" + fileLocation + "'");
+		// message("Reading server file at '" + fileLocation + "'");
 		Vector<String[]> csvRows = FileUtil.getCSVRows(fileLocation);
 		serverColHeaders = csvRows.get(0);
 		for (int i = 1; i < csvRows.size(); i++)
@@ -382,6 +529,11 @@ public class FHIRServlet  extends HttpServlet {
 		return allServers;
 	}
 
+	
+	// ----------------------------------------------------------------------------------------------------
+	//             session-cached access to csv rows defining resources
+	// ----------------------------------------------------------------------------------------------------
+	
 	
 	/**
 	 * @param serverName
@@ -454,7 +606,7 @@ public class FHIRServlet  extends HttpServlet {
 				if ((narrativeFileName != null) && (!narrativeFileName.equals(""))) try
 				{
 					String fileLocation = session.getServletContext().getRealPath("narratives/" + narrativeFileName);
-					message("Reading narrative template file at '" + fileLocation + "'");
+					// message("Reading narrative template file at '" + fileLocation + "'");
 					Element root = XMLUtil.getRootElement(fileLocation);
 					templatesForServer.put(resourceName, root);
 				}
@@ -508,7 +660,7 @@ public class FHIRServlet  extends HttpServlet {
 			String mappingProjectFolder = resourceDetails[2];
 			String mappingSetName = resourceDetails[3];
 			String path = session.getServletContext().getRealPath("mappings/" + mappingProjectFolder + "/MappingSets/" + mappingSetName);
-			message("Reading mapping set at '" + path + "'");
+			// message("Reading mapping set at '" + path + "'");
 			MappedStructure mappingSet = FileUtil.getMappedStructure(path);
 			EPackage classModel = mappingSet.getClassModelRoot();
 			// null = XML root (can be set later); null = messageChannel
@@ -531,7 +683,7 @@ public class FHIRServlet  extends HttpServlet {
 	{
 		Hashtable<String,Hashtable<String,String[]>> allResources = new Hashtable<String,Hashtable<String,String[]>>();
 		String fileLocation = session.getServletContext().getRealPath("serviceDefs/resources.csv");
-		message("Reading resource file at '" + fileLocation + "'");
+		// message("Reading resource file at '" + fileLocation + "'");
 		Vector<String[]> csvRows = FileUtil.getCSVRows(fileLocation);
 		resourceColHeaders = csvRows.get(0);
 		for (int i = 1; i < csvRows.size(); i++)
@@ -546,6 +698,11 @@ public class FHIRServlet  extends HttpServlet {
 		}
 		return allResources;
 	}
+	
+	
+	// ----------------------------------------------------------------------------------------------------
+	//             session-cached access to csv rows defining searches
+	// ----------------------------------------------------------------------------------------------------
 	
 	/**
 	 * 
@@ -600,6 +757,37 @@ public class FHIRServlet  extends HttpServlet {
 	}
 
 	
+	// ----------------------------------------------------------------------------------------------------
+	//                      session-cached access to XML documents (such as CDAs) used as servers
+	// ----------------------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param serverName
+	 * @return the document root for an XML server
+	 * @throws MapperException
+	 */
+	public Element getDocumentRoot(String serverName)  throws MapperException
+	{
+		Element docRoot = null;
+		
+		@SuppressWarnings("unchecked")
+		Hashtable<String,Element> docRoots = (Hashtable<String,Element>)session.getAttribute("documentRoots");
+		if (docRoots == null) docRoots = new Hashtable<String,Element>();
+		
+		docRoot = docRoots.get(serverName);
+		if (docRoot == null)
+		{
+			// server parameter 'url' specifies file location in the web service folder (such as 'FHIR_a') in the Tomcat webapps folder
+			String fileLocation = session.getServletContext().getRealPath(getServerParameter(serverName,"url"));
+			docRoot = XMLUtil.getRootElement(fileLocation);
+			docRoots.put(serverName,docRoot);
+			session.setAttribute("documentRoots", docRoots);
+		}
+		return docRoot;
+	}
+	
+	
 	
 	// ----------------------------------------------------------------------------------------------------
 	//                      session-cached access to DBStructures (which provide database connections)
@@ -615,8 +803,6 @@ public class FHIRServlet  extends HttpServlet {
 	{
 		DBStructure structure = null;
 		Connection con = null;
-		String[] serverDetails = getServerDetails(serverName);
-		if (serverDetails == null) throw new MapperException("No server '" + serverName + "'");
 		
 		@SuppressWarnings("unchecked")
 		Hashtable<String,DBStructure> structures = (Hashtable<String,DBStructure>)session.getAttribute("dbStructures");
@@ -625,13 +811,13 @@ public class FHIRServlet  extends HttpServlet {
 		structure = structures.get(serverName);
 		if (structure == null)
 		{
-			String url = serverDetails[1];
+			String url = getServerParameter(serverName,"url");
 			// convention in the server table to denote a database using embedded Derby
 			if (url.startsWith("embedded")) url = makeEmbeddedURL(url);
 			
-			String userName = serverDetails[2];
-			String password = serverDetails[3];
-			String schema = serverDetails[4];
+			String userName = getServerParameter(serverName,"username");
+			String password = getServerParameter(serverName,"password");
+			String schema = getServerParameter(serverName,"schema");
 			
 			DBConnect connector = new DBConnect(url, userName, password, schema);
 			try
@@ -754,7 +940,6 @@ public class FHIRServlet  extends HttpServlet {
 		response.setContentType("text/xml");
 		message("Sending error '" + text + "' with status code " + statusCode);
         response.sendError(statusCode, text);
-        message("sent");
 	}
 
 

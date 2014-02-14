@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.hl7.fhir.instance.model.DateAndTime;
 import org.hl7.fhir.instance.model.Factory;
 import org.hl7.fhir.instance.model.Type;
 import org.hl7.fhir.instance.model.Instant;
@@ -172,9 +173,14 @@ public class PrimitiveTypes {
 				{
 					result = new Instant();
 					Calendar cal = xmlToDate((String)value);
-					((Instant)result).setValue(cal);					
+					((Instant)result).setValue(new DateAndTime(cal));					
+					//((Instant)result).setValue(cal);					
 				}
-				catch (Exception ex) {throw new MapperException("Error in Primitive data type 'instant': " + ex.getMessage());}
+				catch (Exception ex) 
+				{
+					ex.printStackTrace();
+					throw new MapperException("Error in Primitive data type 'instant': " + ex.getMessage());
+				}
 				else throw new MapperException("Value for instant is not a string, but is " + value.getClass().getName());
 			}			
 		}

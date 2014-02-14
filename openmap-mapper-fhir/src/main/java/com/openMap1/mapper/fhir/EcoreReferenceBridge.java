@@ -18,30 +18,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.hl7.fhir.instance.model.Address.AddressUse;
-import org.hl7.fhir.instance.model.AdverseReaction.CausalityExpectation;
-import org.hl7.fhir.instance.model.AdverseReaction.ExposureType;
-import org.hl7.fhir.instance.model.AdverseReaction.ReactionSeverity;
-import org.hl7.fhir.instance.model.AllergyIntolerance.Criticality;
-import org.hl7.fhir.instance.model.AllergyIntolerance.Sensitivitystatus;
-import org.hl7.fhir.instance.model.AllergyIntolerance.Sensitivitytype;
 import org.hl7.fhir.instance.model.AtomEntry;
 import org.hl7.fhir.instance.model.AtomFeed;
 import org.hl7.fhir.instance.model.Code;
-import org.hl7.fhir.instance.model.Conformance.RestfulConformanceMode;
-import org.hl7.fhir.instance.model.Conformance.SearchParamType;
-import org.hl7.fhir.instance.model.Conformance.TypeRestfulOperation;
-import org.hl7.fhir.instance.model.Contact.ContactSystem;
-import org.hl7.fhir.instance.model.Contact.ContactUse;
-import org.hl7.fhir.instance.model.Document.DocumentAttestationMode;
-import org.hl7.fhir.instance.model.Group.GroupType;
-import org.hl7.fhir.instance.model.HumanName.NameUse;
-import org.hl7.fhir.instance.model.Identifier.IdentifierUse;
-import org.hl7.fhir.instance.model.List_.ListMode;
-import org.hl7.fhir.instance.model.Medication.MedicationKind;
-import org.hl7.fhir.instance.model.Observation.ObservationReliability;
-import org.hl7.fhir.instance.model.Observation.ObservationStatus;
-import org.hl7.fhir.instance.model.Quantity.QuantityComparator;
+import org.hl7.fhir.instance.model.DateAndTime;
 import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceFactory;
 import org.hl7.fhir.instance.model.String_;
@@ -324,8 +304,16 @@ public class EcoreReferenceBridge {
 		
 		// there is no consistent rule for binding class names; so this hack is necessary
 		String modBinding = binding;
-		String[] badBindings = {"SensitivityType","SensitivityStatus"};
-		if (GenUtil.inArray(binding, badBindings)) modBinding = GenUtil.initialUpperCase(binding.toLowerCase());
+		String[] badBindings = 
+				{"SensitivityType",
+				"SensitivityStatus",
+				"ParticipantRequired",
+				"ParticipationStatus",
+				"SlotStatus",
+				"ActStatus",
+				"QuantityCompararator"};   //sic
+		if (GenUtil.inArray(binding, badBindings)) 
+			modBinding = GenUtil.initialUpperCase(binding.toLowerCase());
 		
 		String bindingClassName = REFERENCE_MODEL_PACKAGE + containingClassName + "$" + modBinding;
 		String bindingFactoryName = bindingClassName + "EnumFactory";
@@ -349,8 +337,8 @@ public class EcoreReferenceBridge {
 			else if (binding.equals("MimeType")) {}
 			else 
 			{
-				trace("*** Failed to find binding class " + bindingClassName);
-				modelErrors.put(theClass.getName(), "Cannot find binding class " + bindingClassName);
+				message("*** Failed to find binding class " + bindingClassName + " in class " + containingClassName);
+				modelErrors.put(theClass.getName(), "Cannot find binding class " + bindingClassName + " in class " + containingClassName);
 			}
 		}
 	}
@@ -582,7 +570,8 @@ public class EcoreReferenceBridge {
 		if (title != null) feed.setTitle(title);
 		
 		// the time the AtomFeed was updated is now - ignore any value from the EObject
-		feed.setUpdated(Calendar.getInstance());
+		feed.setUpdated(new DateAndTime(Calendar.getInstance()));
+		//feed.setUpdated(Calendar.getInstance());
 		
 		// follow EReferences of the Ecore AtomFeed object to resources
 		for (Iterator<EStructuralFeature> it = inputObject.eClass().getEStructuralFeatures().iterator(); it.hasNext();)
@@ -667,7 +656,8 @@ public class EcoreReferenceBridge {
 			 {
 				 /* make the component; there is no factory in the reference implementation to do this. 
 				  * Component classes, being inner classes, have a constructor with one parameter which 
-				  * is the instance of the outer class. */
+				  * is the instance of the outer class.
+				  * They may also have other constructors with more parameters */
 				 if (resourceObject == null) 
 					 throw new MapperException("Component class " + eCoreClassName + "has no containing resource");
 				 Class<?>[] constructorArgtypes = new Class[1];
@@ -675,14 +665,32 @@ public class EcoreReferenceBridge {
 				 // trace("predicted param class: " + constructorArgtypes[0].getName());
 				 Object[] constructorArgs = new Object[1];
 				 constructorArgs[0] = resourceObject;
-				 // some tests
 				 Constructor<?>[] constructors = referenceModelClass.getConstructors();
-				 Constructor<?> cons = constructors[0];
-				 Class<?>[] paramTypes = cons.getParameterTypes();
-				 // trace("Constructors for " + referenceModelClass.getName() + ": " + constructors.length + "; params: " + paramTypes.length);
-				 // trace("param class: " + paramTypes[0].getName());
-				 // end of tests
-				 result = cons.newInstance(constructorArgs);
+				 int foundConstructors = 0;
+				 // look for the constructor with only one parameter, of the correct class
+				 for (int c = 0; c < constructors.length;c++)
+				 {
+					 Constructor<?> cons = constructors[c];
+					 Class<?>[] paramTypes = cons.getParameterTypes();
+					 showParamTypes(paramTypes);
+					 if (paramTypes.length == 0)
+					 {
+						 foundConstructors++;
+						 constructorArgs = new Object[0];
+						 result = cons.newInstance(constructorArgs);
+					 }
+					 else if (paramTypes.length == 1)
+					 {
+						 String actualParamType = resourceObject.getClass().getName();
+						 String expectedParamType = paramTypes[0].getName();
+						 if (actualParamType.equals(expectedParamType))
+						 {
+							 foundConstructors++;
+							 result = cons.newInstance(constructorArgs);
+						 }
+					 }
+				 }
+				 if (foundConstructors != 1) throw new MapperException(foundConstructors + " constructors with one parameter for class " + referenceModelClass.getName());
 			 }
 			 else if (objectType.equals("ComplexDataType"))
 			 {
@@ -763,6 +771,16 @@ public class EcoreReferenceBridge {
 	}
 	
 
+	/**
+	 * show the parameter types of a constructor
+	 * @param paramTypes
+	 */
+	private void showParamTypes(Class<?>[] paramTypes)
+	{
+		String types = "Parameter types ";
+		for (int p = 0; p < paramTypes.length;p++) types = types + paramTypes[p].getName() + " ";
+		message(types);
+	}
 	
 	/**
 	 * 
@@ -818,12 +836,6 @@ public class EcoreReferenceBridge {
 				trace("No setter method for feature " + featureName + " of class " + targetClassName);
 			}
 		}
-		catch (MapperException ex) 
-		{
-			ex.printStackTrace();
-			instanceErrors.put(targetClassName, "Failed to apply setter method " + featureName);
-			trace("Failed to apply setter method " + featureName  + " of class " + targetClassName + "; ");
-		}		
 		catch (Exception ex) 
 		{
 			ex.printStackTrace();
@@ -857,16 +869,25 @@ public class EcoreReferenceBridge {
 			// get the binding factory class
 			Class<?> bindingFactory = bindingFactories.get(binding);
 			if (bindingFactory == null) throw new MapperException("Cannot find binding factory class " + binding);
+			// message("Binding factory class: " + bindingFactory.getName());
 			
-			// make an instance of the binding factory class; assume the constructor has one argument, the enclosing resource or complex data type object
-			Constructor<?> binder = bindingFactory.getConstructors()[0];
-			Object[] constructorArgs = new Object[1];
-			constructorArgs[0] = target;
-			// if the target object is of a component class, use the containing resource in the constructor
-			if ((resourceObject != null) && (target.getClass().getName().contains("$"))) {constructorArgs[0] = resourceObject;}
+			/* make an instance of the binding factory class; 
+			 * if it is a static class, the constructor has no parameters,
+			 * or if it is not, the constructor has one argument, the enclosing resource or complex data type object
+			 */
+			Constructor<?> binder = bindingFactory.getConstructors()[0]; //assume there is only one constructor
+			Class<?>[] paramTypes = binder.getParameterTypes();
+			int nTypes = paramTypes.length;
+			Object[] constructorArgs = new Object[nTypes];
+			if (nTypes == 1)// when the binding factory class is not static (does this ever occur?)
+			{
+				constructorArgs[0] = target;
+				// if the target object is of a component class, use the containing resource in the constructor
+				if ((resourceObject != null) && (target.getClass().getName().contains("$"))) {constructorArgs[0] = resourceObject;}
+			}
 			Object binderInstance = binder.newInstance(constructorArgs);
 			
-			// use the binder instance to try to make an Enum (does not yet)
+			// use the binder instance to make an Enum
 			Class<?>[] argtypes = new Class[1];
 			argtypes[0] = Class.forName("java.lang.String");
 			Object[] args = new Object[1];
@@ -877,56 +898,27 @@ public class EcoreReferenceBridge {
 
 			// exception will be thrown by an invalid code value
 			Object res = null;
-			try {res = codeSetter.invoke(binderInstance, args);}
+			try 
+			{
+				res = codeSetter.invoke(binderInstance, args);
+			}
 			catch (Exception ex)
 			{
 				res = null;
 				setValue = null;
 				instanceErrors.put(theClass.getName(), "Invalid code value '" + (String)args[0] + "' for binding '" + binding + "'");
-				trace ("Invalid code value '" + (String)args[0] + "' for binding '" + binding + "'");
+				message ("Invalid code value '" + (String)args[0] + "' for binding '" + binding + "'");
 			}
 			
 			// convert the instance to an Enumeration, depending on the binding
 			if (res != null) 
 			{
 				setValue = makeEnumerationGeneric(binding, res, feat, theClass);
-				// setValue = makeEnumeration(binding, res, feat, theClass);
 			}
 		}
 		return setValue; // null if the code value was invalid
 	}
 	
-	/* I have now bypassed this dreadful piece of code
-	private org.hl7.fhir.instance.model.Enumeration<?> makeEnumeration(String binding, Object res, EStructuralFeature feat, EClass theClass) throws MapperException
-	{
-		message("Making Enumeration for binding " + binding);
-		Object setValue = null;
-		if (binding.equals("ContactUse")) setValue = new org.hl7.fhir.instance.model.Enumeration<ContactUse>((ContactUse)res);
-		else if (binding.equals("ContactSystem")) setValue = new org.hl7.fhir.instance.model.Enumeration<ContactSystem>((ContactSystem)res);
-		else if (binding.equals("AddressUse")) setValue = new org.hl7.fhir.instance.model.Enumeration<AddressUse>((AddressUse)res);
-		else if (binding.equals("NameUse")) setValue = new org.hl7.fhir.instance.model.Enumeration<NameUse>((NameUse)res);
-		else if (binding.equals("IdentifierUse")) setValue = new org.hl7.fhir.instance.model.Enumeration<IdentifierUse>((IdentifierUse)res);
-		else if (binding.equals("MedicationKind")) setValue = new org.hl7.fhir.instance.model.Enumeration<MedicationKind>((MedicationKind)res);
-		else if (binding.equals("GroupType")) setValue = new org.hl7.fhir.instance.model.Enumeration<GroupType>((GroupType)res);
-		else if (binding.equals("ObservationReliability")) setValue = new org.hl7.fhir.instance.model.Enumeration<ObservationReliability>((ObservationReliability)res);
-		else if (binding.equals("ObservationStatus")) setValue = new org.hl7.fhir.instance.model.Enumeration<ObservationStatus>((ObservationStatus)res);
-		else if (binding.equals("SensitivityType")) setValue = new org.hl7.fhir.instance.model.Enumeration<Sensitivitytype>((Sensitivitytype)res);
-		else if (binding.equals("Criticality")) setValue = new org.hl7.fhir.instance.model.Enumeration<Criticality>((Criticality)res);
-		else if (binding.equals("SensitivityStatus")) setValue = new org.hl7.fhir.instance.model.Enumeration<Sensitivitystatus>((Sensitivitystatus)res);
-		else if (binding.equals("ListMode")) setValue = new org.hl7.fhir.instance.model.Enumeration<ListMode>((ListMode)res);
-		else if (binding.equals("ReactionSeverity")) setValue = new org.hl7.fhir.instance.model.Enumeration<ReactionSeverity>((ReactionSeverity)res);
-		else if (binding.equals("CausalityExpectation")) setValue = new org.hl7.fhir.instance.model.Enumeration<CausalityExpectation>((CausalityExpectation)res);
-		else if (binding.equals("ExposureType")) setValue = new org.hl7.fhir.instance.model.Enumeration<ExposureType>((ExposureType)res);
-		else if (binding.equals("DocumentAttestationMode")) setValue = new org.hl7.fhir.instance.model.Enumeration<DocumentAttestationMode>((DocumentAttestationMode)res);
-		else if (binding.equals("QuantityComparator")) setValue = new org.hl7.fhir.instance.model.Enumeration<QuantityComparator>((QuantityComparator)res);
-		else if (binding.equals("TypeRestfulOperation")) setValue = new org.hl7.fhir.instance.model.Enumeration<TypeRestfulOperation>((TypeRestfulOperation)res);
-		else if (binding.equals("RestfulConformanceMode")) setValue = new org.hl7.fhir.instance.model.Enumeration<RestfulConformanceMode>((RestfulConformanceMode)res);
-		else if (binding.equals("SearchParamType")) setValue = new org.hl7.fhir.instance.model.Enumeration<SearchParamType>((SearchParamType)res);
-
-		else throw new MapperException("Binding '" + binding + "' of feature '" + feat.getName() + "' of class '" + theClass.getName() +  "' not yet catered for");
-		return (org.hl7.fhir.instance.model.Enumeration<?>)setValue;
-	}
-	*/
 	
 	/**
 	 * 
@@ -1407,7 +1399,8 @@ public class EcoreReferenceBridge {
 	 */
 	private String addResource(AtomFeed feed, Resource r, String title, String id) {
 		AtomEntry e = new AtomEntry();
-		e.setUpdated(Calendar.getInstance());
+		e.setUpdated(new DateAndTime(Calendar.getInstance()));
+		//e.setUpdated(Calendar.getInstance());
 		e.setResource(r);
 		e.setTitle(title);
 		e.setId(id);

@@ -1,5 +1,6 @@
 package com.openMap1.mapper.fhir.server;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -42,9 +43,10 @@ import com.openMap1.mapper.util.XMLUtil;
 public class FHIRSearchManager {
 	
 	private FHIRServlet servlet;
-		
-	// the FHIR class model for the resource
-	private EPackage classModel;
+	
+	private String serverName;
+	
+	private String serverType;
 	
 	// key = resource id; value = narrative for the resource
 	private Hashtable<String,Narrative> allNarratives;
@@ -56,11 +58,112 @@ public class FHIRSearchManager {
 	 * @param servlet
 	 * @throws MapperException
 	 */
-	public FHIRSearchManager(FHIRServlet servlet)  throws MapperException
+	public FHIRSearchManager(FHIRServlet servlet,String serverName, String serverType)  throws MapperException
 	{
 		this.servlet = servlet;
+		this.serverName = serverName;
+		this.serverType = serverType;
 		
-		classModel = servlet.getMappedStructure(servlet.serverName(), servlet.resourceName()).getClassModelRoot();
+	}
+	
+	private EPackage getClassModel(String resourceName) throws MapperException
+	{
+		EPackage classModel = servlet.getMappedStructure(serverName, resourceName).getClassModelRoot();
+		if (classModel == null) throw new MapperException("Cannot get class model for resource " + resourceName);
+		return classModel;
+	}
+	
+	/**
+	 * 
+	 * @param resourceName
+	 * @param query
+	 * @param ids
+	 * @throws MapperException
+	 */
+	public void buildFHIRIds(String resourceName, String query, String[] substitutes, Hashtable<String,String> ids) throws MapperException
+	{
+		// make a parser for the object query
+		// message("parsing object query");
+		Vector<String[]> errors = new Vector<String[]>();
+        QueryParser queryParser = new QueryParserImpl_Ecore(getClassModel(resourceName),"X",errors,tracing);
+
+        // possibly replace quoted strings '%0', '%1' in the query text by fhir ids of refrenced resources
+        String newQuery = query;
+        if (substitutes != null) 
+        {
+        	newQuery = replaceAllInQuery(query, substitutes);
+        	message("substituted query: " + newQuery);
+        }
+        
+        // parse the query
+    	boolean parsable = queryParser.parse(newQuery);
+    	if (!parsable)  throw new MapperException("Cannot parse object query " + newQuery);
+    	
+		// define the query strategy (ordering of the QueryClasses made by the parser)
+    	QueryStrategy queryStrategy = new QueryStrategyImpl(queryParser);
+		queryStrategy.defineStrategy();
+		
+		// define subsets for all QueryClasses (needed to make an SQL query)
+		MDLXOReader reader = servlet.getReader(serverName, resourceName);
+		queryStrategy.setSubsets("X",reader);
+		
+		// set up the DOM to retrieve FHIR ids for all resources matching the search
+		setReaderDOMForFHIRIds(reader,queryParser);
+		        
+        // execute the query against the DOM
+        QueryExecutor executor = new QueryExecutor(reader,queryParser,queryStrategy);
+        executor.initialiseQuery();
+        executor.calculateResult(true); // merge duplicate fhir ids,which should not exist
+        executor.setResultVector();
+        
+        // collect the resource ids
+        Vector<Vector<String[]>> id_results = executor.resultVector();
+        for (Iterator<Vector<String[]>> it = id_results.iterator();it.hasNext();)
+        {
+        	Vector<String[]> resRow = it.next();
+        	String[] firstCell = resRow.get(0);
+        	String fhir_id = firstCell[2];
+        	ids.put(fhir_id, "1");
+        }
+	}
+	
+	/**
+	 * replace a series of quoted strings '%0', '%1' etc in an object query 
+	 * by elements 0, 1, etc of a string array (which are fhir ids of referenced resources)
+	 * @param query
+	 * @param substitutes
+	 * @return
+	 */
+	private String replaceAllInQuery(String query, String[] substitutes)
+	{
+		String newQuery = query;
+		for (int s = 0; s < substitutes.length; s++)
+		{
+			String toReplace = "%" + s;   // '%0', '%1', etc
+			String nextQuery = replaceInQuery(newQuery, substitutes[s],toReplace);
+			newQuery = nextQuery;
+		}
+		return newQuery;
+	}
+	
+	/**
+	 * replace '<placeholder>' in single quotes by '<substitute>' in single quotes
+	 * @param query
+	 * @param substitute
+	 * @param placeHolder
+	 * @return
+	 */
+	private String replaceInQuery(String query, String substitute, String placeHolder)
+	{
+		StringTokenizer st = new StringTokenizer(query,"'",true);
+		String replaced = "";
+		while (st.hasMoreTokens())
+		{
+			String piece = st.nextToken();
+			if (piece.equals(placeHolder)) piece = substitute;
+			replaced = replaced + piece;
+		}
+		return replaced;
 	}
 	
 	/**
@@ -70,84 +173,70 @@ public class FHIRSearchManager {
 	 * @throws MapperException
 	 */
 	@SuppressWarnings("unchecked")
-	public EObject getFHIRSearchResult(String query) throws MapperException
+	public EObject getResourceBundle(String resourceName,  Hashtable<String,String> ids) throws MapperException
 	{
-		// Parse the object query
-		message("parsing object query");
-		Vector<String[]> errors = new Vector<String[]>();
-        QueryParser queryParser = new QueryParserImpl_Ecore(classModel,"X",errors,tracing);
-    	boolean parsable = queryParser.parse(query);
-    	if (!parsable)  throw new MapperException("Cannot parse object query " + query);
-    	
-		message("defining query strategy");
-		// define the query strategy (ordering of the QueryClasses made by the parser)
-    	QueryStrategy queryStrategy = new QueryStrategyImpl(queryParser);
-		queryStrategy.defineStrategy();
-		
-		message("defining mapping subsets");
-		// define subsets for all QueryClasses (needed to make an SQL query)
-		MDLXOReader reader = servlet.getReader(servlet.serverName(), servlet.resourceName());
-		queryStrategy.setSubsets("X",reader);
-		
-    	message("Making RDBReader");
-        // make an RDBReader
-        DBStructure database = servlet.getDBStructure(servlet.serverName());
-        RDBReader rdbReader = new RDBReader(database,"noFile");
-
-        message("defining SQL query");
-		// convert the object model query into (one) SQL query to populate an XML DOM
-        Vector<SQLQuery> queries = queryParser.makeSQLQueries("X", database);
-        
-        message("Running SQL query");
-        // run the SQL query and convert the result set to an XML DOM
-        rdbReader.initiateQuery(queries);
-        Element rootNode = rdbReader.DOMFromSQL(queries);
-        reader.setRoot(rootNode);
-        
-        // execute the query against the DOM
-        message("executing DOM query for fhir_ids");
-        QueryExecutor executor = new QueryExecutor(reader,queryParser,queryStrategy);
-        executor.initialiseQuery();
-        executor.calculateResult(true); // merge duplicate fhir ids,which should not exist
-        executor.setResultVector();
-        
-        // collect the resource EObjects
-        Vector<Vector<String[]>> id_results = executor.resultVector();
         Vector<EObject> resources = new Vector<EObject>();
-        message("collecting " + id_results.size() + " resource EObjects");
         allNarratives = new Hashtable<String,Narrative>() ;
-        for (Iterator<Vector<String[]>> it = id_results.iterator();it.hasNext();)
+        for (Enumeration<String> en = ids.keys();en.hasMoreElements();)
         {
-        	Vector<String[]> resRow = it.next();
-        	String[] firstCell = resRow.get(0);
-        	String fhir_id = firstCell[2];
+        	String fhir_id = en.nextElement();
         	
-        	EObject resourceObject  = getResource(servlet.resourceName(),fhir_id);
+        	EObject resourceObject  = getResource(resourceName,fhir_id);
         	if (resourceObject == null) message("Failed to retrieve resource with id " + fhir_id);
         	else 
         	{
         		resources.add(resourceObject);
-        		message("making narrative");
-        		Narrative nar = makeNarrative(resourceObject,servlet.resourceName());
+        		Narrative nar = makeNarrative(resourceObject,resourceName);
         		if (nar != null) allNarratives.put(fhir_id, nar);
-        		else message("no narrative for resource " + servlet.resourceName());
+        		else message("no narrative for resource " + resourceName);
         	}
         }
         
         // create the top AtomFeed EObject, and add the resources to it
-        message("creating top AtomFeed object to hold " + resources.size() + "resources");
+		MDLXOReader reader = servlet.getReader(serverName, resourceName);
         EObject feedObject = ModelUtil.createModelObject("feed.AtomFeed", reader.classModel());
         EClass feedClass = ModelUtil.getNamedClass(reader.classModel(), "feed.AtomFeed");
-        EStructuralFeature resourceFeature = feedClass.getEStructuralFeature(GenUtil.initialLowerCase(servlet.resourceName()));
+        EStructuralFeature resourceFeature = feedClass.getEStructuralFeature(GenUtil.initialLowerCase(resourceName));
         if (resourceFeature == null) throw new MapperException("Cannot find resource feature of AtomFeed object");
         Object featureVal = feedObject.eGet(resourceFeature);
         if (featureVal instanceof EList<?>)
         	for (int i = 0; i < resources.size();i++) ((EList<EObject>)featureVal).add(resources.get(i));
         else throw new MapperException("resource feature is not a list");		
-        message("added resources to top AtomFeed object");
         
         
 		return feedObject;
+	}
+	
+	/**
+	 * 
+	 * @param reader
+	 * @param queryParser
+	 * @throws MapperException
+	 */
+	private void setReaderDOMForFHIRIds(MDLXOReader reader,QueryParser queryParser) throws MapperException
+	{
+		
+		// RDBMS server; execute the SQL query and build the DOM from it
+		if (serverType.equals(FHIRServlet.RDBMS))
+		{
+	        // make an RDBReader
+	        DBStructure database = servlet.getDBStructure(serverName);
+	        RDBReader rdbReader = new RDBReader(database,"noFile");
+
+			// convert the object model query into (one) SQL query to populate an XML DOM
+	        Vector<SQLQuery> queries = queryParser.makeSQLQueries("X", database);
+	        
+	        // run the SQL query and convert the result set to an XML DOM
+	        rdbReader.initiateQuery(queries);
+	        Element rootNode = rdbReader.DOMFromSQL(queries);
+	        reader.setRoot(rootNode);
+		}
+		
+		// XML based server; just use the whole DOM
+		else if (serverType.equals(FHIRServlet.XML))
+		{
+			reader.setRoot(servlet.getDocumentRoot(serverName));
+		}
 	}
 	
 	
@@ -166,27 +255,50 @@ public class FHIRSearchManager {
 
 		// Parse the object query
 		Vector<String[]> errors = new Vector<String[]>();
-        QueryParser queryParser = new QueryParserImpl_Ecore(classModel,"X",errors,tracing);
+        QueryParser queryParser = new QueryParserImpl_Ecore(getClassModel(resourceName),"X",errors,tracing);
     	boolean parsable = queryParser.parse(objectQuery);
     	if (!parsable)  throw new MapperException("Cannot parse object query " + objectQuery);
 		
 		// define the query strategy (ordering of the QueryClasses made by the parser), in order to define the mapping subsets
     	QueryStrategy queryStrategy = new QueryStrategyImpl(queryParser);
 		queryStrategy.defineStrategy();
-		MDLXOReader reader = servlet.getReader(servlet.serverName(), resourceName);
+		MDLXOReader reader = servlet.getReader(serverName, resourceName);
 		queryStrategy.setSubsets("X",reader);
 		
-		// define the SQL query
-        DBStructure database = servlet.getDBStructure(servlet.serverName());
-        Vector<SQLQuery> queries = queryParser.makeSQLQueries("X", database);
-        
-        // run the SQL query and convert the result set to an XML DOM
-        RDBReader rdbReader = new RDBReader(database,"noFile");
-        rdbReader.initiateQuery(queries);
-        Element rootNode = rdbReader.DOMFromSQL(queries);
-        
-        return getResourceFromDOM(reader,rootNode, resourceName, fhir_id);
-        
+		Element rootNode = getDOMForOneResource(queryParser);		        
+        return getResourceFromDOM(reader,rootNode, resourceName, fhir_id);        
+	}
+	
+	/**
+	 * 
+	 * @param queryParser
+	 * @return
+	 * @throws MapperException
+	 */
+	private Element getDOMForOneResource(QueryParser queryParser) throws MapperException
+	{
+		Element rootNode = null;
+		
+		// RDBMS case; execute the SQL query and build the DOM from it
+		if (serverType.equals(FHIRServlet.RDBMS))
+		{
+			// define the SQL query
+	        DBStructure database = servlet.getDBStructure(serverName);
+	        Vector<SQLQuery> queries = queryParser.makeSQLQueries("X", database);
+	        
+	        // run the SQL query and convert the result set to an XML DOM
+	        RDBReader rdbReader = new RDBReader(database,"noFile");
+	        rdbReader.initiateQuery(queries);
+	        rootNode = rdbReader.DOMFromSQL(queries);
+		}
+		
+		// XML case; just use the whole DOM
+		else if (serverType.equals(FHIRServlet.XML))
+		{
+			rootNode = servlet.getDocumentRoot(serverName);
+		}
+		
+        return rootNode;
 	}
 	
 	/**
@@ -280,14 +392,16 @@ public class FHIRSearchManager {
 		String text = XMLUtil.getText(DOMNode);
 		Vector<Element> childEls = XMLUtil.childElements(DOMNode);
 		
-		XhtmlNode  node = new XhtmlNode();		
-		node.setName(nodeName);
-		node.setNodeType(NodeType.Element);
+		XhtmlNode  node = new XhtmlNode(NodeType.Element,nodeName);		
+		// XhtmlNode  node = new XhtmlNode();node.setNodeType(NodeType.Element);node.setName(nodeName);	
+		
+		
 		
 		if ((text != null) && (text.length() > 0))
 		{
-			XhtmlNode textNode = new XhtmlNode();
-			textNode.setNodeType(NodeType.Text);
+			XhtmlNode textNode = new XhtmlNode(NodeType.Text);
+			//XhtmlNode textNode = new XhtmlNode();textNode.setNodeType(NodeType.Text);
+			
 			textNode.setContent(text);
 			node.getChildNodes().add(textNode);
 		}
@@ -319,7 +433,7 @@ public class FHIRSearchManager {
 	private Element makeNarrativeDom(EObject resource, String resourceName) throws MapperException
 	{
 		// get the narrative template DOM for the resource type
-		Element templateEl = servlet.getNarrativeTemplate(servlet.serverName(), resourceName);	
+		Element templateEl = servlet.getNarrativeTemplate(serverName, resourceName);	
 		if (templateEl != null)
 		{
 			Document doc = XMLUtil.makeOutDoc();
