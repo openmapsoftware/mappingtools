@@ -10,10 +10,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import com.openMap1.mapper.MappedStructure;
 import com.openMap1.mapper.core.MapperException;
 import com.openMap1.mapper.mapping.MDLBase;
-import com.openMap1.mapper.mapping.associationMapping;
 import com.openMap1.mapper.util.GenUtil;
 import com.openMap1.mapper.util.ModelUtil;
 
