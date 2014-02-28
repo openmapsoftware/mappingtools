@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ViewContents view="Data Sources">
+	<HeaderInformation/>
+	<TableColumns>
+		<column>Code</column>
+		<column>Type</column>
+		<column>Source</column>
+		<column>Mappings</column>
+		<column>ClassModel</column>
+	</TableColumns>
+	<TableContent>
+		<row>
+			<Code>A</Code>
+			<Type>XSD</Type>
+			<Source>/OpenEyes/Instances/FHIR/small-bundled-patient-example.xml</Source>
+			<Mappings>/OpenEyes/MappingSets/FHIR/fhirPatient.mapper</Mappings>
+			<ClassModel>/OpenEyes/ClassModel/patient.ecore</ClassModel>
+		</row>
+		<row>
+			<Code>B</Code>
+			<Type>XSD</Type>
+			<Source>/OpenEyes/Instances/RDB/silver.xml</Source>
+			<Mappings>/OpenEyes/MappingSets/RDB/s3.mapper</Mappings>
+			<ClassModel>/OpenEyes/ClassModel/patient.ecore</ClassModel>
+		</row>
+		<row>
+			<Code>C</Code>
+			<Type>RDBMS</Type>
+			<Source>jdbc:derby://localhost:1527/silver</Source>
+			<Mappings>/OpenEyes/MappingSets/RDB/s3_rel.mapper</Mappings>
+			<ClassModel>/OpenEyes/ClassModel/patient.ecore</ClassModel>
+		</row>
+	</TableContent>
+</ViewContents>

@@ -1,0 +1,13 @@
+server,resource,LHS,type,paths,conditions,solo
+silver,Patient,_id,id,fhir_id,equal,yes
+silver,Patient,identifier,token,identifier.system; identifier.value,equal,yes
+silver,Patient,given:exact,string,name.given.value,equal,yes
+silver,Patient,family:exact,string,name.family.value,equal,yes
+silver,Patient,birthDate,date,birthDate,equal,yes
+silver,Patient,gender,token,gender.coding.system; gender.coding.code,equal,yes
+bronze,Patient,_id,id,fhir_id,equal,yes
+bronze,Patient,identifier,token,identifier.system; identifier.value,equal,yes
+bronze,Patient,given:exact,string,name.given.value,equal,yes
+bronze,Patient,family:exact,string,name.family.value,equal,yes
+bronze,Patient,birthDate,date,birthDate,equal,yes
+bronze,Patient,gender,token,gender.coding.system; gender.coding.code,equal,yes

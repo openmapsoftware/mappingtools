@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ASCII"?>
+<generic:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:generic="http://www.com.openMap1.mapper/test">
+  <contains_AtomFeed>
+    <patient birthDate="1974-12-25">
+      <gender>
+        <coding code="M"/>
+      </gender>
+      <telecom value="(03) 5555 6473"/>
+      <name>
+        <given value="James"/>
+        <given value="Peter"/>
+        <family value="Chalmers"/>
+      </name>
+      <name>
+        <given value="Jim"/>
+      </name>
+      <address zip="3999" state="Vic" city="PleasantVille"/>
+    </patient>
+  </contains_AtomFeed>
+</generic:Container>

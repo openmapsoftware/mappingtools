@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ASCII"?>
+<AtomFeed xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" id="67bb7af3-5c4a-4ef6-973a-b8928dfa8204" title="Bundle with one Patient resource">
+  <patient birthDate="1974-12-25" active="true">
+    <identifier use="usual" label="MRN">
+      <period start="2001-05-06"/>
+    </identifier>
+    <gender>
+      <coding display="Male" code="M" system="http://hl7.org/fhir/v3/AdministrativeGender"/>
+    </gender>
+    <telecom use="home"/>
+    <telecom value="(03) 5555 6473" use="work" system="phone"/>
+    <contact>
+      <name>
+        <given value="B&#xe9;n&#xe9;dicte"/>
+        <family value="du"/>
+        <family value="March&#xe9;"/>
+      </name>
+      <telecom value="+33 (237) 998327" system="phone"/>
+      <relationship>
+        <coding code="partner" system="http://hl7.org/fhir/patient-contact-relationship"/>
+      </relationship>
+    </contact>
+    <name use="official">
+      <given value="Peter"/>
+      <given value="James"/>
+      <family value="Chalmers"/>
+    </name>
+    <name use="usual">
+      <given value="Jim"/>
+    </name>
+    <address use="home" zip="3999" state="Vic" city="PleasantVille">
+      <line value="534 Erewhon St"/>
+    </address>
+  </patient>
+</AtomFeed>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>.</p>
+            <table border="1">
+              <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>$ name.prefix.value + name.given.value + name.family.value</td>
+                </tr>
+                <tr>
+                  <td>Date of Birth</td>
+                  <td>$ birthDate</td>
+                </tr>
+                <tr>
+                  <td>Gender</td>
+                  <td>$ gender.coding.code</td>
+                </tr>
+                <tr>
+                  <td>Address</td>
+                  <td>$,address.line.value + address.city + address.state + address.zip</td>
+                </tr>
+                <tr>
+                  <td>Id</td>
+                  <td>$:identifier.system + identifier.value</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>.</p>
+          </div>

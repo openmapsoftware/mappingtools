@@ -17,6 +17,7 @@
     <module>openmap-mapper-edit</module>
     <module>openmap-mapper-health</module>
     <module>openmap-mapper-editor</module>
+    <module>openmap-mapper-fhir-webapp</module>
   </modules>
   
   	<build>

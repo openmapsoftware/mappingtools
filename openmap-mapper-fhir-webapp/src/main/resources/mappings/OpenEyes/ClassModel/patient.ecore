@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fhir" nsURI="com.OpenMap1.fhir" nsPrefix="f">
+  <eAnnotations source="urn:hl7-org:v3/mif2">
+    <details key="RMIM" value="true"/>
+  </eAnnotations>
+  <eSubpackages name="feed">
+    <eClassifiers xsi:type="ecore:EClass" name="AtomFeed">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="entry" value="true"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="authorName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="rawString"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="authorUri" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="rawString"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="rawString"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="rawString"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="updated" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="rawString"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="organization" upperBound="-1"
+          eType="#//resources/Organization" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="patient" upperBound="-1"
+          eType="#//resources/Patient" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="resources">
+    <eClassifiers xsi:type="ecore:EClass" name="Resource">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="Resource"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fhir_id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="dateTime"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Organization" eSuperTypes="#//resources/Resource">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="Resource"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="telecom" upperBound="-1"
+          eType="#//complexTypes/Contact" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="boolean"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="OrganizationType"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contact" upperBound="-1"
+          eType="#//components/OrganizationContactComponent" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="partOf" eType="#//resources/Organization"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" upperBound="-1"
+          eType="#//complexTypes/Identifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="address" upperBound="-1"
+          eType="#//complexTypes/Address" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Patient" eSuperTypes="#//resources/Resource">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="Resource"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" upperBound="-1"
+          eType="#//complexTypes/Identifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="gender" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="AdministrativeGender"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="dateTime"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="provider" eType="#//resources/Organization"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="communication" upperBound="-1"
+          eType="#//complexTypes/CodeableConcept" containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="Language"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="telecom" upperBound="-1"
+          eType="#//complexTypes/Contact" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contact" upperBound="-1"
+          eType="#//components/ContactComponent" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="name" upperBound="-1"
+          eType="#//complexTypes/HumanName" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="photo" upperBound="-1"
+          eType="#//complexTypes/Attachment" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="maritalStatus" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="MaritalStatus"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="link" upperBound="-1"
+          eType="#//resources/Patient"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="address" upperBound="-1"
+          eType="#//complexTypes/Address" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="boolean"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="animal" eType="#//components/AnimalComponent"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="components">
+    <eClassifiers xsi:type="ecore:EClass" name="OrganizationContactComponent">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="Component"/>
+        <details key="inResource" value="Organization"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="telecom" upperBound="-1"
+          eType="#//complexTypes/Contact" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//complexTypes/HumanName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="gender" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="AdministrativeGender"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="address" eType="#//complexTypes/Address"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="purpose" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="ContactPartyType"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContactComponent">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="Component"/>
+        <details key="inResource" value="Patient"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="address" eType="#//complexTypes/Address"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//complexTypes/HumanName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="telecom" upperBound="-1"
+          eType="#//complexTypes/Contact" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="gender" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="AdministrativeGender"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="organization" eType="#//resources/Organization"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relationship" upperBound="-1"
+          eType="#//complexTypes/CodeableConcept" containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="ContactRelationship"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AnimalComponent">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="Component"/>
+        <details key="inResource" value="Patient"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="genderStatus" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="AnimalGenderStatus"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="breed" eType="#//complexTypes/CodeableConcept"
+          containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="AnimalBreed"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="species" lowerBound="1"
+          eType="#//complexTypes/CodeableConcept" containment="true">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="Binding" value="AnimalSpecies"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="complexTypes">
+    <eClassifiers xsi:type="ecore:EClass" name="Contact">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="period" eType="#//complexTypes/Period"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="use" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="ContactUse"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="system" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="ContactSystem"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Period">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="dateTime"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="dateTime"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CodeableConcept">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="coding" upperBound="-1"
+          eType="#//complexTypes/Coding" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Coding">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="display" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="system" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="uri"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="primary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="boolean"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HumanName">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="prefix" upperBound="-1"
+          eType="#//primitiveTypes/String_" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="suffix" upperBound="-1"
+          eType="#//primitiveTypes/String_" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="period" eType="#//complexTypes/Period"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="given" upperBound="-1"
+          eType="#//primitiveTypes/String_" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="use" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="NameUse"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="family" upperBound="-1"
+          eType="#//primitiveTypes/String_" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Address">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="period" eType="#//complexTypes/Period"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="use" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="AddressUse"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="zip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="line" upperBound="-1"
+          eType="#//primitiveTypes/String_" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Identifier">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="system" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="uri"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="use" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="IdentifierUse"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="period" eType="#//complexTypes/Period"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assigner" eType="#//resources/Organization"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attachment">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="ComplexDataType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="uri"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="data" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="base64Binary"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hash" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="base64Binary"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="Language"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="code"/>
+          <details key="Binding" value="MimeType"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="integer"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="primitiveTypes">
+    <eClassifiers xsi:type="ecore:EClass" name="String_">
+      <eAnnotations source="urn:hl7-org:v3/mif2">
+        <details key="type" value="PrimitiveDataType"/>
+        <details key="PrimitiveType" value="string"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:hl7-org:v3/mif2">
+          <details key="PrimitiveType" value="string"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

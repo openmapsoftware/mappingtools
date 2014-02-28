@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Bundle with one Patient resource</title>
+	<id>67bb7af3-5c4a-4ef6-973a-b8928dfa8204</id>
+	<updated>2013-10-24T15:11:33.261+01:00</updated>
+	<entry>
+		<title>title</title>
+		<id>14571651-1d83-497e-88ee-ccf33b2fb679</id>
+		<updated>2013-10-24T15:11:33.262+01:00</updated>
+		<content type="text/xml">
+			<Patient xmlns="http://hl7.org/fhir">
+				<identifier>
+					<use value="usual"/>
+					<label value="MRN"/>
+					<period>
+						<start value="2001-05-06"/>
+					</period>
+				</identifier>
+				<name>
+					<use value="official"/>
+					<family value="Chalmers"/>
+					<given value="Peter"/>
+					<given value="James"/>
+				</name>
+				<name>
+					<use value="usual"/>
+					<given value="Jim"/>
+				</name>
+				<telecom>
+					<use value="home"/>
+				</telecom>
+				<telecom>
+					<system value="phone"/>
+					<value value="(03) 5555 6473"/>
+					<use value="work"/>
+				</telecom>
+				<gender>
+					<coding>
+						<system value="http://hl7.org/fhir/v3/AdministrativeGender"/>
+						<code value="M"/>
+						<display value="Male"/>
+					</coding>
+				</gender>
+				<birthDate value="1974-12-25"/>
+				<address>
+					<use value="home"/>
+					<line value="534 Erewhon St"/>
+					<city value="PleasantVille"/>
+					<state value="Vic"/>
+					<zip value="3999"/>
+				</address>
+				<contact>
+					<relationship>
+						<coding>
+							<system value="http://hl7.org/fhir/patient-contact-relationship"/>
+							<code value="partner"/>
+						</coding>
+					</relationship>
+					<name>
+						<family value="du"/>
+						<family value="Marché"/>
+						<given value="Bénédicte"/>
+					</name>
+					<telecom>
+						<system value="phone"/>
+						<value value="+33 (237) 998327"/>
+					</telecom>
+				</contact>
+				<active value="true"/>
+			</Patient>
+		</content>
+	</entry>
+</feed>

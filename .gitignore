@@ -24,6 +24,11 @@ local.properties
 # Locally stored "Eclipse launch configurations"
 *.launch
 
+# Eclipse
+.classpath
+.project
+.settings/
+
 # CDT-specific
 .cproject
 

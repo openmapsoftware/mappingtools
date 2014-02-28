@@ -1,0 +1,1 @@
+select Patient.fhir_id Patient.birthDate where Patient.fhir_id = '1'

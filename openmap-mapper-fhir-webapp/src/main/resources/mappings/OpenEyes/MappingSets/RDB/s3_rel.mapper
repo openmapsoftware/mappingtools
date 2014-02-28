@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.openMap1.mapper:MappedStructure xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.openMap1.mapper="http:///com/openMap1/mapper.ecore" uMLModelURL="platform:/resource/OpenEyes/ClassModel/patient.ecore" structureType="RDBMS" structureURL="jdbc:derby://localhost:1527/silver">
+  <rootElement name="database" minMultiplicity="1" expanded="true">
+    <nodeMappingSet>
+      <objectMappings mappedClass="AtomFeed" mappedPackage="feed"/>
+    </nodeMappingSet>
+    <childElements name="ENV030_LOCDETS" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <childElements name="OBJ_TYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="OBJ_LOC" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="DATE_FR" type="DATE" expanded="true"/>
+        <childElements name="OBJ_DESC" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="SEQUENCE" type="NUMBER(6, 0)" expanded="true"/>
+        <childElements name="LOC_TYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="ADD_FORM" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="ADD_NAM" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADD_NUM" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="ADD_ST" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADD_DIS" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADD_TWN" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADD_CTY" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADD_CNT" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="PC" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="TEL_1" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="TEL_2" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="FAX_1" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="FAX_2" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="REG_ID" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="NAT_ID" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="NAT_CL" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="NHS_PURC" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="NHS_PROV" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="HEAD_TYP" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="HEADLOC" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="CONTACT1" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="CONTACT2" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="CONTACT3" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="COMMS" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="INTER" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="EMAIL" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="COST" type="VARCHAR2(20 BYTE)" expanded="true"/>
+        <childElements name="DEBTOR" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="OWN_OBJT" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="OWN_OBJ" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="DATE_TO" type="DATE" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="LIB003_LOOKUPCODE" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <childElements name="SYS" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="ULNKEY" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="CODE" type="VARCHAR2(8 BYTE)" expanded="true"/>
+        <childElements name="DESCRIPT" type="VARCHAR2(30 BYTE)" expanded="true"/>
+        <childElements name="LDESC" type="VARCHAR2(50 BYTE)" expanded="true"/>
+        <childElements name="PARAM" type="VARCHAR2(15 BYTE)" expanded="true"/>
+        <childElements name="ABBREV" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="FUNC" type="NUMBER(2, 0)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="NEXT_OF_KINS" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <childElements name="RM_PATIENT_NO" type="NUMBER(8, 0)" expanded="true"/>
+        <childElements name="SEQ_NO" type="NUMBER(4, 0)" expanded="true"/>
+        <childElements name="NEXT_OF_KIN_RELATION" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="REL_TEXT" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="DISC_IND" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="TITLE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="SURNAME" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="FORENAME1" type="VARCHAR2(20 BYTE)" expanded="true"/>
+        <childElements name="ADDR_FORMAT" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="PROPERTY_NAME" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="PROPERTY_NO" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="ADDRESS_LINE_1" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADDRESS_LINE_2" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADDRESS_LINE_3" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADDRESS_LINE_4" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="POSTCODE" type="VARCHAR2(9 BYTE)" expanded="true"/>
+        <childElements name="HOME_PHONE_NO" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="DAY_PHONE_NO" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="DATE_START" type="DATE" expanded="true"/>
+        <childElements name="DATE_END" type="DATE" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+        <childElements name="REL_STAT" type="VARCHAR2(4 BYTE)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="NUMBER_IDS" fixedValue="" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <nodeMappingSet>
+          <objectMappings mappedClass="Identifier" mappedPackage="complexTypes"/>
+          <associationMappings>
+            <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole="">
+              <mappingConditions xsi:type="com.openMap1.mapper:CrossCondition" leftPath="RM_PATIENT_NO" description="" rightPath="RM_PATIENT_NO"/>
+            </mappedEnd1>
+            <mappedEnd2 mappedClass="Identifier" mappedPackage="complexTypes" mappedRole="identifier"/>
+          </associationMappings>
+        </nodeMappingSet>
+        <childElements name="NUMBER_ID" type="VARCHAR2(10 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Identifier" mappedPackage="complexTypes" mappedProperty="value"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="NUM_ID_TYPE" type="VARCHAR2(4 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Identifier" mappedPackage="complexTypes" mappedProperty="system"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="RM_PATIENT_NO" type="NUMBER(8, 0)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="OUT040_REFDETS" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <childElements name="REFNO" type="NUMBER(8, 0)" expanded="true"/>
+        <childElements name="X_CN" type="NUMBER(8, 0)" expanded="true"/>
+        <childElements name="DATEX" type="DATE" expanded="true"/>
+        <childElements name="TIMEX" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="METHOD" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DT_REC" type="DATE" expanded="true"/>
+        <childElements name="REC_LOC" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="SRCE_REF" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="S_TYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="SOURCE" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="P_TYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="REF_PERS" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="DISCIP" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="REASON" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="PRIORITY" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="CANCER" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="CAN_TYPE" type="VARCHAR2(2 BYTE)" expanded="true"/>
+        <childElements name="REF" type="VARCHAR2(17 BYTE)" expanded="true"/>
+        <childElements name="REF_TO" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="REF_SPEC" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="REF_TEXT" type="VARCHAR2(4000 BYTE)" expanded="true"/>
+        <childElements name="CUR_LOC" type="VARCHAR2(8 BYTE)" expanded="true"/>
+        <childElements name="DIAGTYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DIAGCODE" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="DIAGTEXT" type="VARCHAR2(4000 BYTE)" expanded="true"/>
+        <childElements name="DT_CLOSE" type="DATE" expanded="true"/>
+        <childElements name="TM_CLOSE" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="PC_TYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="CLS_PERS" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="CLS_REAS" type="VARCHAR2(8 BYTE)" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+        <childElements name="USED_COUNT" type="NUMBER(6, 0)" expanded="true"/>
+        <childElements name="USRCODET" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_1" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_2" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_3" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_4" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_5" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_6" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_7" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_8" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_9" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="USRCODEC_10" type="VARCHAR2(12 BYTE)" expanded="true"/>
+        <childElements name="REF_ORG" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="RTT" type="VARCHAR2(1 BYTE)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="PATIENT_GPS" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <childElements name="RM_PATIENT_NO" type="NUMBER(8, 0)" expanded="true"/>
+        <childElements name="DATE_FROM" type="DATE" expanded="true"/>
+        <childElements name="GP_ID" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="PRACTICE_CODE" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+        <childElements name="DATE_TO" type="DATE" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="PATIENTS" defaultValue="" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <nodeMappingSet>
+          <objectMappings mappedClass="Patient" mappedPackage="resources"/>
+          <associationMappings>
+            <mappedEnd1 mappedClass="AtomFeed" mappedPackage="feed" mappedRole=""/>
+            <mappedEnd2 mappedClass="Patient" mappedPackage="resources" mappedRole="patient" requiredForObject="true"/>
+          </associationMappings>
+        </nodeMappingSet>
+        <childElements name="RM_PATIENT_NO" type="NUMBER(8, 0)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Patient" mappedPackage="resources" mappedProperty="fhir_id"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="FICT_CLIENT" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="DISC_CLIENT" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="SEX" type="VARCHAR2(4 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="CodeableConcept" mappedPackage="complexTypes"/>
+            <objectMappings mappedClass="Coding" mappedPackage="complexTypes"/>
+            <propertyMappings mappedClass="Coding" mappedPackage="complexTypes" mappedProperty="code"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+              <mappedEnd2 mappedClass="CodeableConcept" mappedPackage="complexTypes" mappedRole="gender" requiredForObject="true"/>
+            </associationMappings>
+            <associationMappings>
+              <mappedEnd1 mappedClass="CodeableConcept" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="Coding" mappedPackage="complexTypes" mappedRole="coding" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="BIOLOGICAL_SEX" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="MARITAL_STAT" type="VARCHAR2(4 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="CodeableConcept" mappedPackage="complexTypes" subset="s1"/>
+            <objectMappings mappedClass="Coding" mappedPackage="complexTypes" subset="s1"/>
+            <propertyMappings mappedClass="Coding" mappedPackage="complexTypes" subset="s1" mappedProperty="code"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+              <mappedEnd2 mappedClass="CodeableConcept" mappedPackage="complexTypes" subset="s1" mappedRole="maritalStatus" requiredForObject="true"/>
+            </associationMappings>
+            <associationMappings>
+              <mappedEnd1 mappedClass="CodeableConcept" mappedPackage="complexTypes" subset="s1" mappedRole=""/>
+              <mappedEnd2 mappedClass="Coding" mappedPackage="complexTypes" subset="s1" mappedRole="coding" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="RELIGION" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DATE_OF_BIRTH" type="DATE" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Patient" mappedPackage="resources" mappedProperty="birthDate"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="TIME_OF_BIRTH" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="PLACE_OF_BIRTH" type="VARCHAR2(30 BYTE)" expanded="true"/>
+        <childElements name="BIRTH_NOTIFICATION" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DATE_OF_DEATH" type="DATE" expanded="true"/>
+        <childElements name="TIME_OF_DEATH" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="PLACE_OF_DEATH" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DEATH_NOTIFICATION" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DATE_DOD_NOTIFIED" type="DATE" expanded="true"/>
+        <childElements name="DATE_POST_MORTEM" type="DATE" expanded="true"/>
+        <childElements name="OUTCOME_PM" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DEATH_CAUSE" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="BLOOD_GRP" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="RHESUS" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="ETHNIC_GRP" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="LANGUAGE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="OLANG" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="INTERPRETER_REQD" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="IMM_STAT" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="ENG_SPK" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="STAFF_MEMBER" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="EMP_CATEGORY" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="OCCUPATION_CODE" type="VARCHAR2(5 BYTE)" expanded="true"/>
+        <childElements name="OCCUPATION_DESC" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="DAY_PHONE_NO" type="VARCHAR2(35 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="Contact" mappedPackage="complexTypes"/>
+            <propertyMappings mappedClass="Contact" mappedPackage="complexTypes" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+              <mappedEnd2 mappedClass="Contact" mappedPackage="complexTypes" mappedRole="telecom" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="DATE_REGISTERED" type="DATE" expanded="true"/>
+        <childElements name="DATE_REG_SICK_DISABLED" type="DATE" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+        <childElements name="NHS_STAT" type="VARCHAR2(2 BYTE)" expanded="true"/>
+        <childElements name="WTEL" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="MTEL" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="MTEL_CS" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="EMAIL" type="VARCHAR2(50 BYTE)" expanded="true"/>
+        <childElements name="EMAIL_CS" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="PDS_FLAG" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="PDS_SCN" type="NUMBER(6, 0)" expanded="true"/>
+        <childElements name="PDS_SYNC" type="DATE" expanded="true"/>
+        <childElements name="PDS_DCPL" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="CTS_FLAG" type="VARCHAR2(1 BYTE)" expanded="true"/>
+        <childElements name="CTS_TEXT" type="VARCHAR2(500 BYTE)" expanded="true"/>
+        <childElements name="SMOKER" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="NOTES" type="VARCHAR2(2000 BYTE)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="PATIENT_ADDRS" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <nodeMappingSet>
+          <objectMappings mappedClass="Address" mappedPackage="complexTypes"/>
+          <associationMappings>
+            <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole="">
+              <mappingConditions xsi:type="com.openMap1.mapper:CrossCondition" leftPath="RM_PATIENT_NO" rightPath="RM_PATIENT_NO"/>
+            </mappedEnd1>
+            <mappedEnd2 mappedClass="Address" mappedPackage="complexTypes" mappedRole="address" requiredForObject="true"/>
+          </associationMappings>
+        </nodeMappingSet>
+        <childElements name="RM_PATIENT_NO" type="NUMBER(8, 0)" expanded="true"/>
+        <childElements name="ADDR_TYPE" type="VARCHAR2(1 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="use"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="DATE_START" type="DATE" expanded="true"/>
+        <childElements name="ADDR_FORMAT" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="PROPERTY_NAME" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="PROPERTY_NO" type="VARCHAR2(10 BYTE)" expanded="true"/>
+        <childElements name="ADDR1" type="VARCHAR2(35 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s3"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s3" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Address" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" subset="s3" mappedRole="line" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="ADDR2" type="VARCHAR2(35 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="city"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="ADDR3" type="VARCHAR2(35 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="state"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="ADDR4" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="ADDR5" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="POSTCODE" type="VARCHAR2(9 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="zip"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="HA_CODE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="TEL_NO" type="VARCHAR2(35 BYTE)" expanded="true"/>
+        <childElements name="DWELLING_TYPE" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="SHARING_ACCOM" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="DATE_END" type="DATE" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+      </childElements>
+    </childElements>
+    <childElements name="SURNAME_IDS" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <nodeMappingSet>
+          <objectMappings mappedClass="HumanName" mappedPackage="complexTypes"/>
+          <associationMappings>
+            <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole="">
+              <mappingConditions xsi:type="com.openMap1.mapper:CrossCondition" leftPath="RM_PATIENT_NO" rightPath="RM_PATIENT_NO"/>
+            </mappedEnd1>
+            <mappedEnd2 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole="name" requiredForObject="true"/>
+          </associationMappings>
+        </nodeMappingSet>
+        <childElements name="RM_PATIENT_NO" type="NUMBER(8, 0)" expanded="true"/>
+        <childElements name="SURNAME_TYPE" type="VARCHAR2(2 BYTE)" expanded="true"/>
+        <childElements name="SURNAME_ID" type="VARCHAR2(35 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s1"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s1" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" subset="s1" mappedRole="family" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="NAME1" type="VARCHAR2(20 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" mappedRole="given" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="NAME2" type="VARCHAR2(20 BYTE)" expanded="true"/>
+        <childElements name="TITLE" type="VARCHAR2(5 BYTE)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s2"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s2" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" subset="s2" mappedRole="prefix" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="SURNAME_ID_SOUNDEX" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="NAME1_SOUNDEX" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="NAME2_SOUNDEX" type="VARCHAR2(4 BYTE)" expanded="true"/>
+        <childElements name="HDDR_GROUP" type="CHAR(48 BYTE)" expanded="true"/>
+        <childElements name="NAME3" type="VARCHAR2(20 BYTE)" expanded="true"/>
+      </childElements>
+    </childElements>
+  </rootElement>
+  <mappingParameters/>
+</com.openMap1.mapper:MappedStructure>

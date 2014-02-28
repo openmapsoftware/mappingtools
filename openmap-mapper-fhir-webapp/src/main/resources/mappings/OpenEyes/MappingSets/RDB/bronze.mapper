@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.openMap1.mapper:MappedStructure xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.openMap1.mapper="http:///com/openMap1/mapper.ecore" uMLModelURL="platform:/resource/OpenEyes/ClassModel/patient.ecore" structureType="RDBMS" structureURL="jdbc:derby://localhost:1527/bronze">
+  <rootElement name="database" minMultiplicity="1" expanded="true">
+    <nodeMappingSet>
+      <objectMappings mappedClass="AtomFeed" mappedPackage="feed"/>
+    </nodeMappingSet>
+    <childElements name="PATIENTS" fixedValue="" expanded="true">
+      <childElements name="record" expanded="true" maxMultiplicity="-1">
+        <nodeMappingSet>
+          <objectMappings mappedClass="Patient" mappedPackage="resources"/>
+          <objectMappings mappedClass="HumanName" mappedPackage="complexTypes"/>
+          <objectMappings mappedClass="Address" mappedPackage="complexTypes"/>
+          <associationMappings>
+            <mappedEnd1 mappedClass="AtomFeed" mappedPackage="feed" mappedRole=""/>
+            <mappedEnd2 mappedClass="Patient" mappedPackage="resources" mappedRole="patient" requiredForObject="true"/>
+          </associationMappings>
+          <associationMappings>
+            <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+            <mappedEnd2 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole="name" requiredForObject="true"/>
+          </associationMappings>
+          <associationMappings>
+            <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+            <mappedEnd2 mappedClass="Address" mappedPackage="complexTypes" mappedRole="address" requiredForObject="true"/>
+          </associationMappings>
+        </nodeMappingSet>
+        <childElements name="ID" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Patient" mappedPackage="resources" mappedProperty="fhir_id"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="PREFIX" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" mappedRole="prefix" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="GIVEN" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s1"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s1" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" subset="s1" mappedRole="given" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="FAMILY" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s2"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s2" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="HumanName" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" subset="s2" mappedRole="family" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="DOB" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Patient" mappedPackage="resources" mappedProperty="birthDate"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="NHSNO" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="Identifier" mappedPackage="complexTypes">
+              <fixedPropertyValues mappedProperty="system" fixedValue="NHS" valueType=""/>
+            </objectMappings>
+            <propertyMappings mappedClass="Identifier" mappedPackage="complexTypes" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+              <mappedEnd2 mappedClass="Identifier" mappedPackage="complexTypes" mappedRole="identifier" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="SEX" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="CodeableConcept" mappedPackage="complexTypes"/>
+            <objectMappings mappedClass="Coding" mappedPackage="complexTypes"/>
+            <propertyMappings mappedClass="Coding" mappedPackage="complexTypes" mappedProperty="code"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+              <mappedEnd2 mappedClass="CodeableConcept" mappedPackage="complexTypes" mappedRole="gender" requiredForObject="true"/>
+            </associationMappings>
+            <associationMappings>
+              <mappedEnd1 mappedClass="CodeableConcept" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="Coding" mappedPackage="complexTypes" mappedRole="coding" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="MARITAL" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="CodeableConcept" mappedPackage="complexTypes" subset="s1"/>
+            <objectMappings mappedClass="Coding" mappedPackage="complexTypes" subset="s1"/>
+            <propertyMappings mappedClass="Coding" mappedPackage="complexTypes" subset="s1" mappedProperty="code"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Patient" mappedPackage="resources" mappedRole=""/>
+              <mappedEnd2 mappedClass="CodeableConcept" mappedPackage="complexTypes" subset="s1" mappedRole="maritalStatus" requiredForObject="true"/>
+            </associationMappings>
+            <associationMappings>
+              <mappedEnd1 mappedClass="CodeableConcept" mappedPackage="complexTypes" subset="s1" mappedRole=""/>
+              <mappedEnd2 mappedClass="Coding" mappedPackage="complexTypes" subset="s1" mappedRole="coding" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="ADDR1" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <objectMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s3"/>
+            <propertyMappings mappedClass="String_" mappedPackage="primitiveTypes" subset="s3" mappedProperty="value"/>
+            <associationMappings>
+              <mappedEnd1 mappedClass="Address" mappedPackage="complexTypes" mappedRole=""/>
+              <mappedEnd2 mappedClass="String_" mappedPackage="primitiveTypes" subset="s3" mappedRole="line" requiredForObject="true"/>
+            </associationMappings>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="ADDR2" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="city"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="ADDR3" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="state"/>
+          </nodeMappingSet>
+        </childElements>
+        <childElements name="POSTCODE" type="VARCHAR(40)" expanded="true">
+          <nodeMappingSet>
+            <propertyMappings mappedClass="Address" mappedPackage="complexTypes" mappedProperty="zip"/>
+          </nodeMappingSet>
+        </childElements>
+      </childElements>
+    </childElements>
+  </rootElement>
+  <mappingParameters/>
+</com.openMap1.mapper:MappedStructure>

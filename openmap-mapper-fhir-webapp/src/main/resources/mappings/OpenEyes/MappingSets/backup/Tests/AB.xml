@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><database>
+	<SILVER.PATIENTS>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<SEX>M</SEX>
+			<DATE_OF_BIRTH>1974-12-25</DATE_OF_BIRTH>
+			<DAY_PHONE_NO>(03) 5555 6473</DAY_PHONE_NO>
+		</record>
+	</SILVER.PATIENTS>
+	<SILVER.PATIENT_ADDRS>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<ADDR2>PleasantVille</ADDR2>
+			<ADDR3>Vic</ADDR3>
+			<POSTCODE>3999</POSTCODE>
+		</record>
+	</SILVER.PATIENT_ADDRS>
+	<SILVER.SURNAME_IDS>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<NAME1>Peter</NAME1>
+			<NAME1>James</NAME1>
+			<NAME2>Chalmers</NAME2>
+		</record>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<NAME1>Jim</NAME1>
+		</record>
+	</SILVER.SURNAME_IDS>
+</database>

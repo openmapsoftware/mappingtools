@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ASCII"?>
+<generic:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:generic="http://www.com.openMap1.mapper/test">
+  <contains_AtomFeed>
+    <patient birthDate="19980203">
+      <gender>
+        <coding code="M"/>
+      </gender>
+      <telecom value="6688"/>
+      <name>
+        <prefix value="Mr"/>
+        <given value="Patrick"/>
+        <family value="Smith"/>
+      </name>
+      <maritalStatus>
+        <coding code="S"/>
+      </maritalStatus>
+      <address country="Cambs" zip="CB8 4GM" state="Huntingdon" city="Godmanchester"/>
+    </patient>
+    <patient birthDate="19800416">
+      <gender>
+        <coding code="F"/>
+      </gender>
+      <telecom value="6737"/>
+      <name>
+        <prefix value="Mrs"/>
+        <given value="Alice"/>
+        <family value="Jones"/>
+      </name>
+      <maritalStatus>
+        <coding code="M"/>
+      </maritalStatus>
+      <address country="Lancs" zip="BK4 8NU" state="Blackpool" city="Henshall"/>
+    </patient>
+  </contains_AtomFeed>
+</generic:Container>

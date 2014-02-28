@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><feed xmlns="http://www.w3.org/2005/Atom">
+	<updated>2013-10-24T15:11:33.722+01:00</updated>
+	<entry>
+		<title>title</title>
+		<id>507b83db-201e-46db-9fe2-48528c891595</id>
+		<updated>2013-10-24T15:11:33.723+01:00</updated>
+		<content type="text/xml">
+			<Patient xmlns="http://hl7.org/fhir">
+				<name>
+					<given value="Jim"/>
+				</name>
+				<name>
+					<family value="Chalmers"/>
+					<given value="James"/>
+					<given value="Peter"/>
+				</name>
+				<telecom>
+					<value value="(03) 5555 6473"/>
+				</telecom>
+				<gender>
+					<coding>
+						<code value="M"/>
+					</coding>
+				</gender>
+				<birthDate value="1974-12-25"/>
+				<address>
+					<city value="PleasantVille"/>
+					<state value="Vic"/>
+					<zip value="3999"/>
+				</address>
+				<active value="false"/>
+			</Patient>
+		</content>
+	</entry>
+</feed>

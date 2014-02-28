@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ASCII"?>
+<AtomFeed xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI">
+  <patient birthDate="6664">
+    <gender>
+      <coding code="6660"/>
+    </gender>
+    <telecom value="6688"/>
+    <name>
+      <prefix value="6796"/>
+      <given value="6794"/>
+      <family value="6795"/>
+    </name>
+    <maritalStatus>
+      <coding code="6662"/>
+    </maritalStatus>
+    <address country="6764" zip="6766" state="6763" city="6762"/>
+  </patient>
+  <patient birthDate="6713">
+    <gender>
+      <coding code="6709"/>
+    </gender>
+    <telecom value="6737"/>
+    <name>
+      <prefix value="6807"/>
+      <given value="6805"/>
+      <family value="6806"/>
+    </name>
+    <maritalStatus>
+      <coding code="6711"/>
+    </maritalStatus>
+    <address country="6782" zip="6784" state="6781" city="6780"/>
+  </patient>
+</AtomFeed>

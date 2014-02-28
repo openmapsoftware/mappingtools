@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><procedures>
+				<proc type="create">
+					<context/>
+					<step caseNo="start" class="feed.AtomFeed" specialNode="false" stepNumber="0" stepType="getAllObjects" subset="" tagName="database"/>
+				</proc>
+				<element name="database" path="/database">
+					<procedures>
+						<proc type="create">
+							<context>
+								<ClassSet class="feed.AtomFeed" subset=""/>
+							</context>
+							<step caseNo="3.5.6.1" ifString="false" stepNumber="0" stepType="addElement" tagName="SILVER.PATIENTS"/>
+							<step caseNo="3.5.6.1" ifString="false" stepNumber="1" stepType="addElement" tagName="SILVER.PATIENT_ADDRS"/>
+							<step caseNo="3.5.6.1" ifString="false" stepNumber="2" stepType="addElement" tagName="SILVER.SURNAME_IDS"/>
+						</proc>
+					</procedures>
+					<element name="SILVER.PATIENTS" path="/database/SILVER.PATIENTS">
+						<procedures>
+							<proc type="create">
+								<context>
+									<ClassSet class="feed.AtomFeed" subset=""/>
+								</context>
+								<step assocName="patient" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="0" stepType="associationInstance" tagName="record">
+									<classSet1 class="feed.AtomFeed" subset=""/>
+									<classSet2 class="resources.Patient" subset=""/>
+								</step>
+							</proc>
+						</procedures>
+						<element name="record" path="/database/SILVER.PATIENTS/record">
+							<procedures>
+								<proc type="create">
+									<context>
+										<ClassSet class="feed.AtomFeed" subset=""/>
+										<ClassSet class="resources.Patient" subset=""/>
+									</context>
+									<step caseNo="3.5.6.5" ifString="false" stepNumber="0" stepType="addElement" tagName="RM_PATIENT_NO"/>
+									<step assocName="gender" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="1" stepType="associationInstance" tagName="SEX">
+										<classSet1 class="resources.Patient" subset=""/>
+										<classSet2 class="complexTypes.CodeableConcept" subset=""/>
+									</step>
+									<step assocName="maritalStatus" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="2" stepType="associationInstance" tagName="MARITAL_STAT">
+										<classSet1 class="resources.Patient" subset=""/>
+										<classSet2 class="complexTypes.CodeableConcept" subset="s1"/>
+									</step>
+									<step caseNo="3.5.2" minIs1="false" pName="birthDate" stepNumber="3" stepType="getProperty">
+										<ClassSet class="resources.Patient" subset=""/>
+									</step>
+									<step caseNo="3.5.2" ifString="true" stepNumber="4" stepType="addElement" tagName="DATE_OF_BIRTH"/>
+									<step assocName="telecom" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="5" stepType="associationInstance" tagName="DAY_PHONE_NO">
+										<classSet1 class="resources.Patient" subset=""/>
+										<classSet2 class="complexTypes.Contact" subset=""/>
+									</step>
+								</proc>
+							</procedures>
+							<element name="RM_PATIENT_NO" path="/database/SILVER.PATIENTS/record/RM_PATIENT_NO">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="resources.Patient" subset=""/>
+										</context>
+										<step caseNo="D.5" minIs1="true" pName="nullPropertyName" stepNumber="0" stepType="getProperty">
+											<ClassSet class="resources.Patient" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="SEX" path="/database/SILVER.PATIENTS/record/SEX">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="resources.Patient" subset=""/>
+											<ClassSet class="complexTypes.CodeableConcept" subset=""/>
+											<ClassSet class="complexTypes.Coding" subset=""/>
+										</context>
+										<step assocName="coding" caseNo="" stepNumber="0" stepType="addToContext" targetEnd="2">
+											<classSet1 class="complexTypes.CodeableConcept" subset=""/>
+											<classSet2 class="complexTypes.Coding" subset=""/>
+										</step>
+										<step caseNo="C.1" minIs1="false" pName="code" stepNumber="1" stepType="getProperty">
+											<ClassSet class="complexTypes.Coding" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="2" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="MARITAL_STAT" path="/database/SILVER.PATIENTS/record/MARITAL_STAT">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="resources.Patient" subset=""/>
+											<ClassSet class="complexTypes.CodeableConcept" subset="s1"/>
+											<ClassSet class="complexTypes.Coding" subset="s1"/>
+										</context>
+										<step assocName="coding" caseNo="" stepNumber="0" stepType="addToContext" targetEnd="2">
+											<classSet1 class="complexTypes.CodeableConcept" subset="s1"/>
+											<classSet2 class="complexTypes.Coding" subset="s1"/>
+										</step>
+										<step caseNo="C.1" minIs1="false" pName="code" stepNumber="1" stepType="getProperty">
+											<ClassSet class="complexTypes.Coding" subset="s1"/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="2" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="DATE_OF_BIRTH" path="/database/SILVER.PATIENTS/record/DATE_OF_BIRTH">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="resources.Patient" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="birthDate" stepNumber="0" stepType="getProperty">
+											<ClassSet class="resources.Patient" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="DAY_PHONE_NO" path="/database/SILVER.PATIENTS/record/DAY_PHONE_NO">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="resources.Patient" subset=""/>
+											<ClassSet class="complexTypes.Contact" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="value" stepNumber="0" stepType="getProperty">
+											<ClassSet class="complexTypes.Contact" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+						</element>
+					</element>
+					<element name="SILVER.PATIENT_ADDRS" path="/database/SILVER.PATIENT_ADDRS">
+						<procedures>
+							<proc type="create">
+								<context>
+									<ClassSet class="feed.AtomFeed" subset=""/>
+								</context>
+								<step caseNo="2.2" class="complexTypes.Address" specialNode="false" stepNumber="0" stepType="getAllObjects" subset="" tagName="record"/>
+							</proc>
+						</procedures>
+						<element name="record" path="/database/SILVER.PATIENT_ADDRS/record">
+							<procedures>
+								<proc type="create">
+									<context>
+										<ClassSet class="feed.AtomFeed" subset=""/>
+										<ClassSet class="complexTypes.Address" subset=""/>
+									</context>
+									<step caseNo="3.5.6.5" ifString="false" stepNumber="0" stepType="addElement" tagName="RM_PATIENT_NO"/>
+									<step caseNo="3.5.2" minIs1="false" pName="city" stepNumber="1" stepType="getProperty">
+										<ClassSet class="complexTypes.Address" subset=""/>
+									</step>
+									<step caseNo="3.5.2" ifString="true" stepNumber="2" stepType="addElement" tagName="ADDR2"/>
+									<step caseNo="3.5.2" minIs1="false" pName="state" stepNumber="3" stepType="getProperty">
+										<ClassSet class="complexTypes.Address" subset=""/>
+									</step>
+									<step caseNo="3.5.2" ifString="true" stepNumber="4" stepType="addElement" tagName="ADDR3"/>
+									<step caseNo="3.5.2" minIs1="false" pName="country" stepNumber="5" stepType="getProperty">
+										<ClassSet class="complexTypes.Address" subset=""/>
+									</step>
+									<step caseNo="3.5.2" ifString="true" stepNumber="6" stepType="addElement" tagName="ADDR4"/>
+									<step caseNo="3.5.2" minIs1="false" pName="zip" stepNumber="7" stepType="getProperty">
+										<ClassSet class="complexTypes.Address" subset=""/>
+									</step>
+									<step caseNo="3.5.2" ifString="true" stepNumber="8" stepType="addElement" tagName="POSTCODE"/>
+								</proc>
+							</procedures>
+							<element name="RM_PATIENT_NO" path="/database/SILVER.PATIENT_ADDRS/record/RM_PATIENT_NO">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</context>
+										<step caseNo="D.6" propName="nullPropertyName" stepNumber="0" stepType="relatedProperty">
+											<refClass class="complexTypes.Address" subset=""/>
+											<assoc name="address" targetClass="resources.Patient" targetEnd="1" targetSubset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="ADDR2" path="/database/SILVER.PATIENT_ADDRS/record/ADDR2">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="city" stepNumber="0" stepType="getProperty">
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="ADDR3" path="/database/SILVER.PATIENT_ADDRS/record/ADDR3">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="state" stepNumber="0" stepType="getProperty">
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="ADDR4" path="/database/SILVER.PATIENT_ADDRS/record/ADDR4">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="country" stepNumber="0" stepType="getProperty">
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="POSTCODE" path="/database/SILVER.PATIENT_ADDRS/record/POSTCODE">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="zip" stepNumber="0" stepType="getProperty">
+											<ClassSet class="complexTypes.Address" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+						</element>
+					</element>
+					<element name="SILVER.SURNAME_IDS" path="/database/SILVER.SURNAME_IDS">
+						<procedures>
+							<proc type="create">
+								<context>
+									<ClassSet class="feed.AtomFeed" subset=""/>
+								</context>
+								<step caseNo="2.2" class="complexTypes.HumanName" specialNode="false" stepNumber="0" stepType="getAllObjects" subset="" tagName="record"/>
+							</proc>
+						</procedures>
+						<element name="record" path="/database/SILVER.SURNAME_IDS/record">
+							<procedures>
+								<proc type="create">
+									<context>
+										<ClassSet class="feed.AtomFeed" subset=""/>
+										<ClassSet class="complexTypes.HumanName" subset=""/>
+									</context>
+									<step caseNo="3.5.6.5" ifString="false" stepNumber="0" stepType="addElement" tagName="RM_PATIENT_NO"/>
+									<step assocName="given" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="1" stepType="associationInstance" tagName="NAME1">
+										<classSet1 class="complexTypes.HumanName" subset=""/>
+										<classSet2 class="primitiveTypes.String_" subset=""/>
+									</step>
+									<step assocName="family" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="2" stepType="associationInstance" tagName="NAME2">
+										<classSet1 class="complexTypes.HumanName" subset=""/>
+										<classSet2 class="primitiveTypes.String_" subset="s1"/>
+									</step>
+									<step assocName="prefix" caseNo="2.1" endsNotInContext="2" maxIs1="false" minIs1="false" stepNumber="3" stepType="associationInstance" tagName="TITLE">
+										<classSet1 class="complexTypes.HumanName" subset=""/>
+										<classSet2 class="primitiveTypes.String_" subset="s2"/>
+									</step>
+								</proc>
+							</procedures>
+							<element name="RM_PATIENT_NO" path="/database/SILVER.SURNAME_IDS/record/RM_PATIENT_NO">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.HumanName" subset=""/>
+										</context>
+										<step caseNo="D.6" propName="nullPropertyName" stepNumber="0" stepType="relatedProperty">
+											<refClass class="complexTypes.HumanName" subset=""/>
+											<assoc name="name" targetClass="resources.Patient" targetEnd="1" targetSubset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="NAME1" path="/database/SILVER.SURNAME_IDS/record/NAME1">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.HumanName" subset=""/>
+											<ClassSet class="primitiveTypes.String_" subset=""/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="value" stepNumber="0" stepType="getProperty">
+											<ClassSet class="primitiveTypes.String_" subset=""/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="NAME2" path="/database/SILVER.SURNAME_IDS/record/NAME2">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.HumanName" subset=""/>
+											<ClassSet class="primitiveTypes.String_" subset="s1"/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="value" stepNumber="0" stepType="getProperty">
+											<ClassSet class="primitiveTypes.String_" subset="s1"/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+							<element name="TITLE" path="/database/SILVER.SURNAME_IDS/record/TITLE">
+								<procedures>
+									<proc type="create">
+										<context>
+											<ClassSet class="feed.AtomFeed" subset=""/>
+											<ClassSet class="complexTypes.HumanName" subset=""/>
+											<ClassSet class="primitiveTypes.String_" subset="s2"/>
+										</context>
+										<step caseNo="C.1" minIs1="false" pName="value" stepNumber="0" stepType="getProperty">
+											<ClassSet class="primitiveTypes.String_" subset="s2"/>
+										</step>
+										<step appendFlag="false" caseNo="content" stepNumber="1" stepType="setText"/>
+									</proc>
+								</procedures>
+							</element>
+						</element>
+					</element>
+				</element>
+			</procedures>

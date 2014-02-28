@@ -1,0 +1,3 @@
+server,type,url,username,password,schema,id,version,publisher,email,date,swName,swVersion,fhirVersion
+silver,RDBMS,embedded/databases/silver,,,,12345,1.2,healthySoft ltd,fred@healthy.com,2013-12-04,healthyEHR,12.5.6,0.12
+bronze,RDBMS,embedded/databases/bronze,,,,67894,1,Acme llp,joe@acme.org,2013-09-06,acmePAS,4.0.4,0.12

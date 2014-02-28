@@ -3,6 +3,7 @@ package com.openMap1.mapper.fhir.server;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ import com.openMap1.mapper.util.XMLUtil;
 
 public class FHIRSearchManager {
 	
-	private FHIRServlet servlet;
+	private OpenMapsFhirService fhirService;
 	
 	private String serverName;
 	
@@ -55,12 +56,12 @@ public class FHIRSearchManager {
 	
 	/**
 	 * 
-	 * @param servlet
+	 * @param fhirService
 	 * @throws MapperException
 	 */
-	public FHIRSearchManager(FHIRServlet servlet,String serverName, String serverType)  throws MapperException
+	public FHIRSearchManager(OpenMapsFhirService fhirService,String serverName, String serverType)  throws MapperException
 	{
-		this.servlet = servlet;
+		this.fhirService = fhirService;
 		this.serverName = serverName;
 		this.serverType = serverType;
 		
@@ -68,7 +69,7 @@ public class FHIRSearchManager {
 	
 	private EPackage getClassModel(String resourceName) throws MapperException
 	{
-		EPackage classModel = servlet.getMappedStructure(serverName, resourceName).getClassModelRoot();
+		EPackage classModel = fhirService.getMappedStructure(serverName, resourceName).getClassModelRoot();
 		if (classModel == null) throw new MapperException("Cannot get class model for resource " + resourceName);
 		return classModel;
 	}
@@ -92,7 +93,6 @@ public class FHIRSearchManager {
         if (substitutes != null) 
         {
         	newQuery = replaceAllInQuery(query, substitutes);
-        	message("substituted query: " + newQuery);
         }
         
         // parse the query
@@ -104,7 +104,7 @@ public class FHIRSearchManager {
 		queryStrategy.defineStrategy();
 		
 		// define subsets for all QueryClasses (needed to make an SQL query)
-		MDLXOReader reader = servlet.getReader(serverName, resourceName);
+		MDLXOReader reader = fhirService.getReader(serverName, resourceName);
 		queryStrategy.setSubsets("X",reader);
 		
 		// set up the DOM to retrieve FHIR ids for all resources matching the search
@@ -182,18 +182,16 @@ public class FHIRSearchManager {
         	String fhir_id = en.nextElement();
         	
         	EObject resourceObject  = getResource(resourceName,fhir_id);
-        	if (resourceObject == null) message("Failed to retrieve resource with id " + fhir_id);
-        	else 
+        	if (resourceObject != null)
         	{
         		resources.add(resourceObject);
         		Narrative nar = makeNarrative(resourceObject,resourceName);
         		if (nar != null) allNarratives.put(fhir_id, nar);
-        		else message("no narrative for resource " + resourceName);
         	}
         }
         
         // create the top AtomFeed EObject, and add the resources to it
-		MDLXOReader reader = servlet.getReader(serverName, resourceName);
+		MDLXOReader reader = fhirService.getReader(serverName, resourceName);
         EObject feedObject = ModelUtil.createModelObject("feed.AtomFeed", reader.classModel());
         EClass feedClass = ModelUtil.getNamedClass(reader.classModel(), "feed.AtomFeed");
         EStructuralFeature resourceFeature = feedClass.getEStructuralFeature(GenUtil.initialLowerCase(resourceName));
@@ -217,10 +215,10 @@ public class FHIRSearchManager {
 	{
 		
 		// RDBMS server; execute the SQL query and build the DOM from it
-		if (serverType.equals(FHIRServlet.RDBMS))
+		if (serverType.equals("RDBMS"))
 		{
 	        // make an RDBReader
-	        DBStructure database = servlet.getDBStructure(serverName);
+	        DBStructure database = fhirService.getDBStructure(serverName);
 	        RDBReader rdbReader = new RDBReader(database,"noFile");
 
 			// convert the object model query into (one) SQL query to populate an XML DOM
@@ -233,9 +231,9 @@ public class FHIRSearchManager {
 		}
 		
 		// XML based server; just use the whole DOM
-		else if (serverType.equals(FHIRServlet.XML))
+		else if (serverType.equals("XML"))
 		{
-			reader.setRoot(servlet.getDocumentRoot(serverName));
+			reader.setRoot(fhirService.getDocumentRoot(serverName));
 		}
 	}
 	
@@ -251,7 +249,6 @@ public class FHIRSearchManager {
 	{
 		// object query to return all attributes of the resource and all its component classes
 		String objectQuery = "select " + resourceName + ".** where " + resourceName + ".fhir_id = '" + fhir_id + "'";
-		message("Query: " + objectQuery);
 
 		// Parse the object query
 		Vector<String[]> errors = new Vector<String[]>();
@@ -262,7 +259,7 @@ public class FHIRSearchManager {
 		// define the query strategy (ordering of the QueryClasses made by the parser), in order to define the mapping subsets
     	QueryStrategy queryStrategy = new QueryStrategyImpl(queryParser);
 		queryStrategy.defineStrategy();
-		MDLXOReader reader = servlet.getReader(serverName, resourceName);
+		MDLXOReader reader = fhirService.getReader(serverName, resourceName);
 		queryStrategy.setSubsets("X",reader);
 		
 		Element rootNode = getDOMForOneResource(queryParser);		        
@@ -280,10 +277,10 @@ public class FHIRSearchManager {
 		Element rootNode = null;
 		
 		// RDBMS case; execute the SQL query and build the DOM from it
-		if (serverType.equals(FHIRServlet.RDBMS))
+		if (serverType.equals("RDBMS"))
 		{
 			// define the SQL query
-	        DBStructure database = servlet.getDBStructure(serverName);
+	        DBStructure database = fhirService.getDBStructure(serverName);
 	        Vector<SQLQuery> queries = queryParser.makeSQLQueries("X", database);
 	        
 	        // run the SQL query and convert the result set to an XML DOM
@@ -293,9 +290,9 @@ public class FHIRSearchManager {
 		}
 		
 		// XML case; just use the whole DOM
-		else if (serverType.equals(FHIRServlet.XML))
+		else if (serverType.equals("XML"))
 		{
-			rootNode = servlet.getDocumentRoot(serverName);
+			rootNode = fhirService.getDocumentRoot(serverName);
 		}
 		
         return rootNode;
@@ -328,9 +325,7 @@ public class FHIRSearchManager {
         	// note - res is an EMF Resource, not a FHIR resource
         	Resource res = factory.createModelInstance(reader, noFile, topObjectToken);
         	if (res.getContents().size() > 0) resourceObject = res.getContents().get(0);
-        }
-        else message("No top object found");
-        
+        }        
         return resourceObject;
 	}
 	
@@ -342,10 +337,62 @@ public class FHIRSearchManager {
 	 */
 	public EObject getConformance(String serverName) throws MapperException
 	{
-		Element rootNode = new Conformance(servlet).makeConfigDom();
-		MDLXOReader conformanceReader = servlet.getReader(serverName, "Conformance");
+		Element rootNode = getConformanceDomForServer(serverName);
+		MDLXOReader conformanceReader = fhirService.getReader(serverName, "Conformance");
 		if (conformanceReader == null) throw new MapperException("Cannot find conformance mappings for server " + serverName);
         return getResourceFromDOM(conformanceReader,rootNode, "Conformance", "no_id");
+	}
+	
+	public Element getConformanceDomForServer(String serverName) throws MapperException
+	{
+		Document doc = XMLUtil.makeOutDoc();
+		Element root = XMLUtil.newElement(doc, "database");
+		doc.appendChild(root);
+		
+		Element servers = XMLUtil.newElement(doc, "servers");
+		root.appendChild(servers);
+		Element resources = XMLUtil.newElement(doc, "resources");
+		root.appendChild(resources);
+		Element searches = XMLUtil.newElement(doc, "searches");
+		root.appendChild(searches);
+		
+		Element serverRecord = XMLUtil.newElement(doc, "record"); 
+		servers.appendChild(serverRecord);
+		String[] details = fhirService.getServerDetails(serverName);
+		for (int i = 0; i < details.length;i++)
+		{
+			String colName = fhirService.getServerInformationKeys()[i];
+			Element colEl = XMLUtil.textElement(doc, colName, details[i]);
+			serverRecord.appendChild(colEl);
+		}
+		
+		Map<String,String[]> resourceDetails = fhirService.getResourceDetailsForServer(serverName);
+		for (String resourceName : resourceDetails.keySet()) {
+			Element resourceRecord = XMLUtil.newElement(doc, "record");
+			resources.appendChild(resourceRecord);
+			details = resourceDetails.get(resourceName);
+			for (int i = 0; i < details.length;i++)
+			{
+				String colName = fhirService.getResourceInformationKeys()[i];
+				Element colEl = XMLUtil.textElement(doc, colName, details[i]);
+				resourceRecord.appendChild(colEl);
+			}
+			
+			Vector<String[]> allSearchDetails = fhirService.getSearches(serverName, resourceName);
+			if (allSearchDetails != null) for (int s = 0; s < allSearchDetails.size();s++)
+			{
+				String[] searchDetails = allSearchDetails.get(s);
+				Element searchRecord = XMLUtil.newElement(doc, "record");
+				searches.appendChild(searchRecord);
+				for (int d = 0; d < searchDetails.length;d++)
+				{
+					String colName = fhirService.getSearchInformationKeys()[d];
+					Element colEl = XMLUtil.textElement(doc, colName, searchDetails[d]);
+					searchRecord.appendChild(colEl);
+				}
+			}
+		}
+		return root;
 	}
 
 	
@@ -433,13 +480,12 @@ public class FHIRSearchManager {
 	private Element makeNarrativeDom(EObject resource, String resourceName) throws MapperException
 	{
 		// get the narrative template DOM for the resource type
-		Element templateEl = servlet.getNarrativeTemplate(serverName, resourceName);	
+		Element templateEl = fhirService.getNarrativeTemplate(serverName, resourceName);	
 		if (templateEl != null)
 		{
 			Document doc = XMLUtil.makeOutDoc();
 			return filledElement(doc, templateEl, resource);		
 		}
-		else message("found no template");
 		return null;
 	}
 	
@@ -604,21 +650,8 @@ public class FHIRSearchManager {
 	 */
 	private void writeNode(XhtmlNode node, int level)
 	{
-		message("Level " + level + ": " + node.getName());
 		for (int i = 0; i < node.getChildNodes().size(); i++) writeNode(node.getChildNodes().get(i), level +1);
 		
 	}
-
-
-	
-	// ----------------------------------------------------------------------------------------------------
-	//                                        odds & sods
-	// ----------------------------------------------------------------------------------------------------
-	
-
-
-	
-	private void message(String s) {servlet.message(s);}
-
 
 }

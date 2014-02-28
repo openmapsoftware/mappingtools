@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.openMap1.mapper:MappedStructure xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.openMap1.mapper="http:///com/openMap1/mapper.ecore" uMLModelURL="platform:/resource/OpenEyes/ClassModel/patient.ecore">
+  <rootElement name="AtomFeed" expanded="true"/>
+  <mappingParameters mappingClass="com.openMap1.mapper.fhir.FHIRMapper"/>
+</com.openMap1.mapper:MappedStructure>

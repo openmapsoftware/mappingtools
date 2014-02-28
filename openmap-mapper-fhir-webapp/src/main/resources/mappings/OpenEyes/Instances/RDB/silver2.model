@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ASCII"?>
+<AtomFeed xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI">
+  <patient fhir_id="2" birthDate="19800416">
+    <gender>
+      <coding code="F"/>
+    </gender>
+    <telecom value="6737"/>
+    <name>
+      <prefix value="Mrs"/>
+      <given value="Alice"/>
+      <family value="Jones"/>
+    </name>
+    <maritalStatus>
+      <coding code="M"/>
+    </maritalStatus>
+    <address country="Lancs" zip="BK4 8NU" state="Blackpool" city="Henshall"/>
+  </patient>
+  <patient fhir_id="1" birthDate="19980203">
+    <gender>
+      <coding code="M"/>
+    </gender>
+    <telecom value="6688"/>
+    <name>
+      <prefix value="Mr"/>
+      <given value="Patrick"/>
+      <family value="Smith"/>
+    </name>
+    <maritalStatus>
+      <coding code="S"/>
+    </maritalStatus>
+    <address country="Cambs" zip="CB8 4GM" state="Huntingdon" city="Godmanchester"/>
+  </patient>
+</AtomFeed>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><procedures>
+				<proc type="create">
+					<context/>
+					<step caseNo="start" ifString="false" stepNumber="0" stepType="addElement" tagName="AtomFeed"/>
+				</proc>
+				<element name="AtomFeed" path="/AtomFeed">
+					<procedures>
+						<proc type="create">
+							<context/>
+						</proc>
+					</procedures>
+				</element>
+			</procedures>

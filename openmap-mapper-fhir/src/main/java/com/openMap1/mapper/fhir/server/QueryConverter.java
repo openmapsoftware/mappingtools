@@ -24,7 +24,7 @@ import com.openMap1.mapper.util.ModelUtil;
 public class QueryConverter {
 	
 	// the FHIR servlet that received the query
-	private FHIRServlet servlet;
+	private OpenMapsFhirService servlet;
 			
 	// the FHIR class model for the resource
 	private EPackage classModel;
@@ -52,7 +52,7 @@ public class QueryConverter {
 	// string values in the searches csv file saying which searches are supported for a resource
 	private String[] fhirTests = {"equal","<",">","<=",">="};
 	
-	public QueryConverter(FHIRServlet servlet,  Map<String,String[]> params,String serverName, String resourceName) throws MapperException
+	public QueryConverter(OpenMapsFhirService servlet,  Map<String,String[]> params,String serverName, String resourceName) throws MapperException
 	{
 		this.servlet = servlet;
 		this.params = params;
@@ -142,7 +142,6 @@ public class QueryConverter {
 				
 				// remove the last " AND " from the chained query
 				chainedQuery = chainedQuery.substring(0, chainedQuery.length() - 5);
-				message("Chained object query: " + chainedQuery);
 				
 				// save the chained query
 				chainedQueries.add(chainedQuery);
@@ -152,7 +151,6 @@ public class QueryConverter {
 		
 		// remove the last " AND " from the main query
 		query = query.substring(0, query.length() - 5);
-		message("Main resource object query: " + query);
 		
 		// if there were any chained queries, they come before the main query
 		chainedQueries.add(query);
@@ -266,8 +264,7 @@ public class QueryConverter {
 				solo = getValue(searchRow,"solo");;
 			}
 		}
-		if (paths == null) throw new MapperException("Server " + servlet.serverName() + ", resource " + servlet.resourceName() 
-				+ " does not support search '" + param + "'");
+		if (paths == null) throw new MapperException("Server does not support search '" + param + "'");
 		
 		String[] result = new String[4];
 		result[0] = paths;
@@ -287,8 +284,8 @@ public class QueryConverter {
 	private String getValue(String[]searchRow, String col) throws MapperException
 	{
 		int cc = -1;
-		for (int c =0 ; c < servlet.searchColHeaders().length;c++) 
-			if (col.equals(servlet.searchColHeaders()[c])) cc = c;
+		for (int c =0 ; c < servlet.getSearchInformationKeys().length;c++) 
+			if (col.equals(servlet.getSearchInformationKeys()[c])) cc = c;
 		if (cc == -1) throw new MapperException("Searches table has no column '" + col + "'");
 		return searchRow[cc];
 	}
@@ -302,7 +299,7 @@ public class QueryConverter {
 	 */
 	private void checkMappings(String resourceName,String path,String refType) throws MapperException
 	{
-		MDLBase mdl = servlet.getReader(servlet.serverName(), servlet.resourceName());
+		MDLBase mdl = servlet.getReader(serverName, resourceName);
 		EClass current = getResourceClass(resourceName);
 		StringTokenizer steps = new StringTokenizer(path,".");
 		while (steps.hasMoreTokens())
@@ -358,21 +355,8 @@ public class QueryConverter {
 			String pVal  = param;
 			for (int i = 0; i < values.length;i++)
 				pVal = pVal + "\t" + values[i];
-			message("Parameter and values: " + pVal);
 		}
 		
 	}
 	
-	
-	// ----------------------------------------------------------------------------------------------------
-	//                                        odds & sods
-	// ----------------------------------------------------------------------------------------------------
-	
-
-
-	
-	private void message(String s) {servlet.message(s);}
-
-
-
 }

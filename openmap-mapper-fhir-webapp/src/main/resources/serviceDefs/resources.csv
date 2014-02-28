@@ -1,0 +1,4 @@
+server,resource,mapping_folder,mapping_set,narrative_template
+silver,Patient,OpenEyes,RDB/s3_rel.mapper,
+bronze,Patient,OpenEyes,RDB/bronze.mapper,Patient_template.xml
+pas,Patient,OpenEyes,RDB/s3_rel.mapper,

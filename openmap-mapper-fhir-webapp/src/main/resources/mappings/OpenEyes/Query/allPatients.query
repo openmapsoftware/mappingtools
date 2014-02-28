@@ -1,0 +1,1 @@
+select Patient.fhir_id Patient.birthDate Patient.name.given.value Patient.name.family.value

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><feed xmlns="http://www.w3.org/2005/Atom">
+	<updated>2013-10-24T15:11:33.480+01:00</updated>
+	<entry>
+		<title>title</title>
+		<id>8de51a74-dc17-4786-ab20-4bc911416701</id>
+		<updated>2013-10-24T15:11:33.481+01:00</updated>
+		<content type="text/xml">
+			<Patient xmlns="http://hl7.org/fhir">
+				<name>
+					<family value="Smith"/>
+					<given value="Patrick"/>
+					<prefix value="Mr"/>
+				</name>
+				<telecom>
+					<value value="6688"/>
+				</telecom>
+				<gender>
+					<coding>
+						<code value="M"/>
+					</coding>
+				</gender>
+				<birthDate value="19980203"/>
+				<address>
+					<city value="Godmanchester"/>
+					<state value="Huntingdon"/>
+					<zip value="CB8 4GM"/>
+					<country value="Cambs"/>
+				</address>
+				<maritalStatus>
+					<coding>
+						<code value="S"/>
+					</coding>
+				</maritalStatus>
+				<active value="false"/>
+			</Patient>
+		</content>
+	</entry>
+	<entry>
+		<title>title</title>
+		<id>216e2ae5-9264-4984-8661-e21d6a9a71f5</id>
+		<updated>2013-10-24T15:11:33.482+01:00</updated>
+		<content type="text/xml">
+			<Patient xmlns="http://hl7.org/fhir">
+				<name>
+					<family value="Jones"/>
+					<given value="Alice"/>
+					<prefix value="Mrs"/>
+				</name>
+				<telecom>
+					<value value="6737"/>
+				</telecom>
+				<gender>
+					<coding>
+						<code value="F"/>
+					</coding>
+				</gender>
+				<birthDate value="19800416"/>
+				<address>
+					<city value="Henshall"/>
+					<state value="Blackpool"/>
+					<zip value="BK4 8NU"/>
+					<country value="Lancs"/>
+				</address>
+				<maritalStatus>
+					<coding>
+						<code value="M"/>
+					</coding>
+				</maritalStatus>
+				<active value="false"/>
+			</Patient>
+		</content>
+	</entry>
+</feed>

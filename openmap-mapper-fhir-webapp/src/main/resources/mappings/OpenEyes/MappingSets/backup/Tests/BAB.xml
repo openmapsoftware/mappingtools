@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><database>
+	<SILVER.PATIENTS>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<SEX>F</SEX>
+			<MARITAL_STAT>M</MARITAL_STAT>
+			<DATE_OF_BIRTH>19800416</DATE_OF_BIRTH>
+			<DAY_PHONE_NO>6737</DAY_PHONE_NO>
+		</record>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_1</RM_PATIENT_NO>
+			<SEX>M</SEX>
+			<MARITAL_STAT>S</MARITAL_STAT>
+			<DATE_OF_BIRTH>19980203</DATE_OF_BIRTH>
+			<DAY_PHONE_NO>6688</DAY_PHONE_NO>
+		</record>
+	</SILVER.PATIENTS>
+	<SILVER.PATIENT_ADDRS>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<ADDR2>Henshall</ADDR2>
+			<ADDR3>Blackpool</ADDR3>
+			<ADDR4>Lancs</ADDR4>
+			<POSTCODE>BK4 8NU</POSTCODE>
+		</record>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_1</RM_PATIENT_NO>
+			<ADDR2>Godmanchester</ADDR2>
+			<ADDR3>Huntingdon</ADDR3>
+			<ADDR4>Cambs</ADDR4>
+			<POSTCODE>CB8 4GM</POSTCODE>
+		</record>
+	</SILVER.PATIENT_ADDRS>
+	<SILVER.SURNAME_IDS>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_0</RM_PATIENT_NO>
+			<NAME1>Alice</NAME1>
+			<NAME2>Jones</NAME2>
+			<TITLE>Mrs</TITLE>
+		</record>
+		<record>
+			<RM_PATIENT_NO>k_resources.Patient_1</RM_PATIENT_NO>
+			<NAME1>Patrick</NAME1>
+			<NAME2>Smith</NAME2>
+			<TITLE>Mr</TITLE>
+		</record>
+	</SILVER.SURNAME_IDS>
+</database>
