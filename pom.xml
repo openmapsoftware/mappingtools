@@ -1,36 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.openMap1.mapper</groupId>
-  <artifactId>openmap-mapper</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>openmap-mapper</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-</properties>
-  <modules>
-    <module>openmap-mapper-fhir</module>
-    <module>openmap-mapper-lib</module>
-    <module>openmap-mapper-user</module>
-    <module>openmap-mapper-edit</module>
-    <module>openmap-mapper-health</module>
-    <module>openmap-mapper-editor</module>
-    <module>openmap-mapper-fhir-webapp</module>
-  </modules>
-  
-  	<build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.openMap1.mapper</groupId>
+	<artifactId>openmap-mapper</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>openmap-mapper</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<eclipse.core.resources.version>3.8.101.v20130717-0806</eclipse.core.resources.version>
+		<eclipse.emf.common.version>2.9.2.v20131212-0545</eclipse.emf.common.version>
+		<eclipse.emf.common.ui.version>2.8.0.v20140203-1126</eclipse.emf.common.ui.version>
+		<eclipse.emf.ecore.xmi.version>2.9.1.v20131212-0545</eclipse.emf.ecore.xmi.version>
+		<eclipse.emf.ecore.version>2.9.2.v20131212-0545</eclipse.emf.ecore.version>
+		<eclipse.emf.edit.version>2.9.0.v20140203-1126</eclipse.emf.edit.version>
+		<eclipse.ui.ide.version>3.3.0-I20070620</eclipse.ui.ide.version>
+		<eclipse.ui.editors.version>3.3.0-v20070606-0010</eclipse.ui.editors.version>
+		<eclipse.ui.workspace.version>3.3.0-I20070608-1100</eclipse.ui.workspace.version>
+		<eclipse.jface.version>3.3.0-I20070606-0010</eclipse.jface.version>
+		<eclipse.xsd.version>2.1.1</eclipse.xsd.version>
+		<apache.derby.version>10.7.1.1</apache.derby.version>
+		<javax.servlet.version>3.1.0</javax.servlet.version>
+		<javax.jtsl.version>1.2</javax.jtsl.version>
+		<fhir.version>0.13</fhir.version>
+		<junit.version>3.8.1</junit.version>
+	</properties>
+	<modules>
+		<module>openmap-mapper-fhir</module>
+		<module>openmap-mapper-lib</module>
+		<module>openmap-mapper-user</module>
+		<module>openmap-mapper-edit</module>
+		<module>openmap-mapper-health</module>
+		<module>openmap-mapper-editor</module>
+		<module>openmap-mapper-fhir-webapp</module>
+	</modules>
+
+	<build>
 		<plugins>
-	      <plugin>
-	        <groupId>org.apache.maven.plugins</groupId>
-	        <artifactId>maven-compiler-plugin</artifactId>
-	        <version>3.1</version>
-	        <configuration>
-	          <source>1.6</source>
-	          <target>1.6</target>
-	        </configuration>
-	      </plugin>
-	    </plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
