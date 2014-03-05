@@ -1,6 +1,5 @@
 package com.openMap1.mapper.query;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;

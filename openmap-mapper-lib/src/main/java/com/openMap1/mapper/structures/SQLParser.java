@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import com.openMap1.mapper.ElementDef;
-import com.openMap1.mapper.MappedStructure;
 import com.openMap1.mapper.MapperFactory;
 import com.openMap1.mapper.MaxMult;
 import com.openMap1.mapper.MinMult;

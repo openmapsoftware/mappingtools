@@ -7,7 +7,6 @@ import com.openMap1.mapper.reader.XOReader;
 import com.openMap1.mapper.reader.objectToken;
 
 import com.openMap1.mapper.converters.CSV_Wrapper;
-import com.openMap1.mapper.core.ClassSet;
 import com.openMap1.mapper.core.MapperException;
 import com.openMap1.mapper.core.notRepresentedException;
 

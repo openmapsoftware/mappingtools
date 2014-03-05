@@ -8,25 +8,21 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 
 import com.openMap1.mapper.core.MapperException;
 import com.openMap1.mapper.presentation.MapperEditor;
 import com.openMap1.mapper.util.FileUtil;
-import com.openMap1.mapper.util.GenUtil;
 import com.openMap1.mapper.util.ModelUtil;
 import com.openMap1.mapper.views.ClassModelView;
 import com.openMap1.mapper.views.WorkBenchUtil;

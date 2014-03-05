@@ -8,7 +8,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 
-import com.openMap1.mapper.Annotations;
 import com.openMap1.mapper.ElementDef;
 import com.openMap1.mapper.MappedStructure;
 import com.openMap1.mapper.MapperFactory;

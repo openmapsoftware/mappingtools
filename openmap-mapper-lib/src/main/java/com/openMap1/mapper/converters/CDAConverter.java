@@ -1,6 +1,5 @@
 package com.openMap1.mapper.converters;
 
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;

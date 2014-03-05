@@ -17,8 +17,6 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Hashtable;
-import java.util.Iterator;
 
 /**
  * Class to extract data and metadata from a Relational database and express it 

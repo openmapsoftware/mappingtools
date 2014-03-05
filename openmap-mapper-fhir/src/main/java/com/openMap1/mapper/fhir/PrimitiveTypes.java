@@ -1,9 +1,7 @@
 package com.openMap1.mapper.fhir;
 
 import java.net.URI;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.eclipse.emf.ecore.EAttribute;
